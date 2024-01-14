@@ -1,0 +1,84 @@
+[
+    {
+        "UniqueID": "HomePage.SettingsGroups.SecurityAndPrivacy",
+        "GroupName": "SecurityAndPrivacy",
+        "Items": [
+            {
+                "Type": "SettingsExpander",
+                "Title": "Additional Security Settings",
+                "Description": "Explore additional security settings for your system.",
+                "Icon": "\uE716",
+                "HasActionIcon": false,
+                "IsClickEnable": false,
+                "IsEnable": true,
+                "UniqueID": "AdditionalSecuritySettings",
+                "IsExpanded": true,
+                "SettingsExpanderItem": [
+                    {
+                        "Type": "SettingsCard",
+                        "Title": "Firewall Settings",
+                        "Description": "Configure your firewall settings for enhanced security.",
+                        "Icon": "\uE721",
+                        "HasActionIcon": false,
+                        "IsClickEnable": true,
+                        "IsEnable": true,
+                        "ToggleSwitchState": true,
+                        "UniqueID": "FirewallSettings"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": "Antivirus Configuration",
+                        "Description": "Adjust your antivirus settings to ensure optimal protection.",
+                        "Icon": "\uE77F",
+                        "HasActionIcon": true,
+                        "IsClickEnable": false,
+                        "IsEnable": true,
+                        "ToggleSwitchState": false,
+                        "UniqueID": "AntivirusConfiguration"
+                    }
+                ]
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable UAC",
+                "Description": "UAC works by notifying users when a program or application attempts to make changes that require administrative privileges. This notification appears in the form of a pop-up window, and the user must explicitly confirm or deny the action by providing administrator credentials or approving the operation.",
+                "HasActionIcon": false,
+                "Icon": "\uE716",
+                "IsClickEnable": false,
+                "IsEnable": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "DisableUAC"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Telemetry",
+                "Description": "Disabling telemetry in Windows involves turning off the collection and transmission of diagnostic and usage data from the operating system to Microsoft. Telemetry is used to enhance software quality, identify issues, and make adjustments based on user performance and experience. Disabling it restricts the amount of information Windows sends to Microsoft.",
+                "HasActionIcon": false,
+                "Icon": "\uE753",
+                "IsClickEnable": false,
+                "IsEnable": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "DisableTelemetry"
+            }
+
+
+        ]
+    },
+    {
+        "UniqueID": "HomePage.SettingsGroups.Power",
+        "GroupName": "Power",
+        "Items": [
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Hibernation",
+                "Description": "Hibernation is a power-saving feature in Windows that allows the system to save the current state, including opened files and running applications, to the hard disk before shutting down. When the computer is powered on again, it can quickly resume from the hibernated state, restoring everything to exactly where it was. Disabling hibernation can potentially improve system performance by reclaiming storage space on the hard disk that would otherwise be occupied by the hibernation file (hiberfil.sys). This file is typically as large as the amount of RAM installed in the system. If your device has ample RAM and you don't frequently use hibernation, disabling it might free up valuable storage and reduce the write activity on your storage device.",
+                "HasActionIcon": false,
+                "Icon": "\uE865",
+                "IsClickEnable": false,
+                "IsEnable": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "DisableHibernation"
+            }
+        ]
+    }
+]

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    x:Class="PowerCommander.DataTemplates.SettingsExpanderTemplate"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerCommander.DataTemplates"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winui="using:WinUICommunity" xmlns:models="using:PowerCommander.Models"
+    mc:Ignorable="d">
+
+    <!-- Converters -->
+    <winui:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+    <!-- DataTemplate for SettingsExpander -->
+    <DataTemplate x:Key="SettingsExpanderTemplate" x:DataType="models:SettingsItem">
+        <!-- SettingsExpander Template -->
+        <winui:SettingsExpander Header="{Binding Title}"  IsExpanded="{x:Bind IsExpanded}" IsEnabled="{x:Bind IsEnable}">
+            <winui:SettingsExpander.HeaderIcon>
+                <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+            </winui:SettingsExpander.HeaderIcon>
+            <winui:SettingsExpander.Description>
+                <TextBlock Text="{Binding Description}" ToolTipService.ToolTip="{Binding Description}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
+            </winui:SettingsExpander.Description>
+            <winui:SettingsExpander.ItemsHeader>
+                <InfoBar IsOpen="{Binding Notification_IsOpen}"
+                         Message="{Binding Notification_Message}"
+                         Title="{Binding Notification_Title}"
+                         CornerRadius="0"
+                         IsClosable="{Binding Notification_IsClosable}" />
+            </winui:SettingsExpander.ItemsHeader>
+            <winui:SettingsExpander.Items>
+                <ItemsControl ItemsSource="{Binding SettingsExpanderItem}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <winui:SettingsCard CornerRadius="0" BorderThickness="0,1,0,0" Padding="60,20,20,20">
+                                <winui:SettingsCard.HeaderIcon>
+                                    <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                                </winui:SettingsCard.HeaderIcon>
+                                <winui:SettingsCard.Description>
+                                    <TextBlock Text="{Binding Description}" ToolTipService.ToolTip="{Binding Description}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
+                                </winui:SettingsCard.Description>
+                                <CheckBox HorizontalAlignment="Right" IsChecked="{Binding ToggleSwitchState, Mode=TwoWay}" />
+                            </winui:SettingsCard>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </winui:SettingsExpander.Items>
+            <ToggleSwitch OffContent="" OnContent="" Visibility="{Binding ExpanderSwitchVisibility, Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{Binding ExpanderSwitchState}" />
+        </winui:SettingsExpander>
+    </DataTemplate>
+
+</ResourceDictionary>

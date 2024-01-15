@@ -16,6 +16,10 @@
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<WindowsPackageType>None</WindowsPackageType>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="DataTemplates\SettingsCardTemplate.xaml" />
+	  <None Remove="DataTemplates\SettingsExpanderTemplate.xaml" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Manifest Include="$(ApplicationManifest)" />
@@ -43,6 +47,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Page Update="Controls\SettingsExpanderDataTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Update="DataTemplates\SettingsCardTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Update="DataTemplates\SettingsExpanderTemplate.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
 		<None Update="JSON\SettingsElements.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

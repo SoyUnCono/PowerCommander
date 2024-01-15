@@ -7,65 +7,9 @@
     xmlns:models="using:PowerCommander.Models"
     xmlns:helpers="using:PowerCommander.Helpers"
     xmlns:winui="using:WinUICommunity"
-    NavigationCacheMode="Disabled"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <!-- Converters -->
-        <winui:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-
-        <!-- DataTemplate for SettingsItem -->
-        <DataTemplate x:DataType="models:SettingsItem" x:Key="SettingsCardTemplate">
-            <!-- SettingsCard Template -->
-            <winui:SettingsCard Header="{x:Bind Title, Mode=OneWay}" IsActionIconVisible="{x:Bind HasActionIcon, Mode=OneWay}" IsEnabled="{x:Bind IsEnable, Mode=OneWay}" IsClickEnabled="{x:Bind IsClickEnable, Mode=OneWay}">
-                <winui:SettingsCard.HeaderIcon>
-                    <FontIcon Glyph="{x:Bind Icon, Mode=OneWay}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                </winui:SettingsCard.HeaderIcon>
-                <winui:SettingsCard.Description>
-                    <TextBlock Text="{x:Bind Description, Mode=OneWay}" ToolTipService.ToolTip="{x:Bind Description, Mode=OneWay}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
-                </winui:SettingsCard.Description>
-                <ToggleSwitch IsOn="{x:Bind ToggleSwitchState, Mode=TwoWay}" OffContent="" OnContent="" />
-            </winui:SettingsCard>
-        </DataTemplate>
-
-        <!-- DataTemplate for SettingsExpander -->
-        <DataTemplate x:Key="SettingsExpanderTemplate" x:DataType="models:SettingsItem">
-            <!-- SettingsExpander Template -->
-            <winui:SettingsExpander Header="{x:Bind Title}"  IsExpanded="{x:Bind IsExpanded}" IsEnabled="{x:Bind IsEnable}">
-                <winui:SettingsExpander.HeaderIcon>
-                    <FontIcon Glyph="{x:Bind Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                </winui:SettingsExpander.HeaderIcon>
-                <winui:SettingsExpander.Description>
-                    <TextBlock Text="{Binding Description, Mode=OneWay}" ToolTipService.ToolTip="{Binding Description, Mode=OneWay}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
-                </winui:SettingsExpander.Description>
-                <winui:SettingsExpander.ItemsHeader>
-                    <InfoBar IsOpen="{x:Bind Notification_IsOpen, Mode=OneWay}"
-                             Message="{x:Bind Notification_Message, Mode=OneWay}"
-                             Title="{x:Bind Notification_Title, Mode=OneWay}"
-                             CornerRadius="0"
-                             IsClosable="{x:Bind Notification_IsClosable, Mode=OneWay}" />
-                </winui:SettingsExpander.ItemsHeader>
-                <winui:SettingsExpander.Items>
-                    <ItemsControl ItemsSource="{x:Bind SettingsExpanderItem}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <winui:SettingsCard CornerRadius="0" BorderThickness="0,1,0,0" Padding="60,20,20,20">
-                                    <winui:SettingsCard.HeaderIcon>
-                                        <FontIcon Glyph="{Binding Icon, Mode=OneWay}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                    </winui:SettingsCard.HeaderIcon>
-                                    <winui:SettingsCard.Description>
-                                        <TextBlock Text="{Binding Description, Mode=OneWay}" ToolTipService.ToolTip="{Binding Description, Mode=OneWay}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
-                                    </winui:SettingsCard.Description>
-                                    <CheckBox HorizontalAlignment="Right" IsChecked="{Binding ToggleSwitchState, Mode=TwoWay}" />
-                                </winui:SettingsCard>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </winui:SettingsExpander.Items>
-                <ToggleSwitch OffContent="" OnContent="" Visibility="{x:Bind ExpanderSwitchVisibility, Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{x:Bind ExpanderSwitchState, Mode=OneWay}" />
-            </winui:SettingsExpander>
-        </DataTemplate>
-
         <!-- SettingsTemplateSelector -->
         <helpers:SettingsTemplateSelector
             x:Key="SettingsElementTemplateSelector"
@@ -75,7 +19,7 @@
     </Page.Resources>
 
     <!-- Main Grid -->
-    <Grid>
+    <Grid x:Name="RootGrid">
         <!-- Grid Rows -->
         <Grid.RowDefinitions>
             <!-- Title Bar Row -->
@@ -148,6 +92,13 @@
                     <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.SecurityAndPrivacy, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
                         <ListView.Header>
                             <winui:SimpleSettingsGroup Header="Security And Privacy" Margin="20,0,0,0" />
+                        </ListView.Header>
+                    </ListView>
+
+                    <!-- Network ListView -->
+                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.Network, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
+                        <ListView.Header>
+                            <winui:SimpleSettingsGroup Header="Network" Margin="16,0,12,2" />
                         </ListView.Header>
                     </ListView>
 

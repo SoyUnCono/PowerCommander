@@ -1,7 +1,7 @@
 ﻿<Application
     x:Class="PowerCommander.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="using:PowerCommander.DataTemplates">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -9,6 +9,8 @@
                 <ResourceDictionary Source="/Styles/FontSizes.xaml" />
                 <ResourceDictionary Source="/Styles/Thickness.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
+                <local:SettingsCardTemplate />
+                <local:SettingsExpanderTemplate />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

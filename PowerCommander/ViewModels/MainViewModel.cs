@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
 using PowerCommander.Contracts.Services;
+using PowerCommander.Helpers;
 using PowerCommander.Models;
 namespace PowerCommander.ViewModels;
 
@@ -41,6 +42,11 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Displayed other tweaks on the view.
     /// </summary>
+    [ObservableProperty] private List<SettingsItem>? _network;
+
+    /// <summary>
+    /// Displayed other tweaks on the view.
+    /// </summary>
     [ObservableProperty] private List<SettingsItem>? _otherTweak;
 
     #endregion
@@ -48,23 +54,9 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Main constructor for the MainViewModel class.
     /// </summary>
-    public MainViewModel(INavigationService navigationService)
-    {
+    public MainViewModel(INavigationService navigationService) =>
         // Initialize navigationService
         _navigationService = navigationService;
-
-        // Initialize the SettingsCard list
-        SecurityAndPrivacy = new List<SettingsItem>();
-        Power = new List<SettingsItem>();
-        GamemodeTweaks = new List<SettingsItem>();
-        OtherTweak = new List<SettingsItem>();
-
-        // Call the method to fetch the data into the listview
-        FetchJSONData("SecurityAndPrivacy", SecurityAndPrivacy);
-        FetchJSONData("Power", Power);
-        FetchJSONData("Gamemode", GamemodeTweaks);
-        FetchJSONData("OtherTweaks", OtherTweak);
-    }
 
     #region private members
 
@@ -74,7 +66,7 @@ public partial class MainViewModel : ObservableRecipient
     /// </summary>
     /// <param name="targetGroupName">The 'GroupName' to identify the specific SettingsGroup to iterate.</param>
     /// <param name="targetSettingsList">The list to populate with 'Items' from the target SettingsGroup.</param>
-    private void FetchJSONData(string targetGroupName, List<SettingsItem> targetSettingsList)
+    private async Task FetchJSONData(string targetGroupName, List<SettingsItem> targetSettingsList)
     {
         try {
 
@@ -94,12 +86,12 @@ public partial class MainViewModel : ObservableRecipient
             }
             else {
                 // Handle the case where the target group or its 'Items' is null
-                Console.WriteLine($"SettingsGroup with 'GroupName' '{targetGroupName}' not found or does not have 'Items'.");
+                await ContentDialogExtension.ShowDialogAsync(mTitle: "Oh no", mDescription: $"SettingsGroup with 'GroupName' '{targetGroupName}' not found or does not have 'Items'.", mCloseButtonText: "Ok", mPrimaryButtonText: "Retry");
             }
         }
         catch (Exception ex) {
             // Handle any exceptions that might occur during the process
-            Console.WriteLine($"An error occurred: {ex.Message}");
+            await ContentDialogExtension.ShowDialogAsync(mTitle: "Oh no", mDescription: $"A problem has ocurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
         }
     }
 
@@ -114,9 +106,21 @@ public partial class MainViewModel : ObservableRecipient
     /// Initializes the ViewModel asynchronously, sets various properties, and updates UI elements.
     /// </summary>
     [RelayCommand]
-    private void InitializeViewModelAsync()
+    private async void InitializeViewModelAsync()
     {
+        // Initialize the SettingsCard list
+        SecurityAndPrivacy = new List<SettingsItem>();
+        Power = new List<SettingsItem>();
+        GamemodeTweaks = new List<SettingsItem>();
+        OtherTweak = new List<SettingsItem>();
+        Network = new List<SettingsItem>();
 
+        // Call the method to fetch the data into the listview
+        await FetchJSONData("SecurityAndPrivacy", SecurityAndPrivacy);
+        await FetchJSONData("Power", Power);
+        await FetchJSONData("Gamemode", GamemodeTweaks);
+        await FetchJSONData("OtherTweaks", OtherTweak);
+        await FetchJSONData("Network", Network);
     }
 
 

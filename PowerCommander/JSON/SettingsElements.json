@@ -65,7 +65,7 @@
                         "Title": null,
                         "Description": "Disable Windows Defender Antivirus",
                         "Icon": "\uEA18",
-                        "HasActionIcon": true,
+                        "HasActionIcon": false,
                         "IsClickEnabled": false,
                         "IsEnabled": true,
                         "ToggleSwitchState": true,
@@ -152,7 +152,7 @@
                         "Title": null,
                         "Description": "Install CommanderPowerPlan without IDLE",
                         "Icon": null,
-                        "HasActionIcon": true,
+                        "HasActionIcon": false,
                         "IsClickEnabled": false,
                         "IsEnabled": true,
                         "ToggleSwitchState": false,
@@ -285,7 +285,7 @@
                         "Title": null,
                         "Description": "HDCP is a security feature that encrypts audiovisual content during transmission to prevent unauthorized interception or copying.",
                         "Icon": null,
-                        "HasActionIcon": true,
+                        "HasActionIcon": false,
                         "IsClickEnabled": false,
                         "IsEnabled": true,
                         "ToggleSwitchState": true,
@@ -296,7 +296,7 @@
                         "Title": null,
                         "Description": "This setting is intended to activate an older version of NVIDIA sharpening, potentially chosen for specific compatibility or preference considerations.",
                         "Icon": null,
-                        "HasActionIcon": true,
+                        "HasActionIcon": false,
                         "IsClickEnabled": false,
                         "IsEnabled": true,
                         "ToggleSwitchState": false,
@@ -307,11 +307,33 @@
                         "Title": null,
                         "Description": "This setting prevents the NVIDIA tray icon from automatically starting during user login.",
                         "Icon": null,
-                        "HasActionIcon": true,
+                        "HasActionIcon": false,
                         "IsClickEnabled": false,
                         "IsEnabled": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "NvidiaTrayIcon"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "Preemption, refers to the ability to interrupt an ongoing task to prioritize or execute another task. Preemption involves the operating system's control, allowing interruption at any point, offering flexibility but introducing potential latency. ",
+                        "Icon": null,
+                        "HasActionIcon": false,
+                        "IsClickEnabled": false,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": false,
+                        "UniqueID": "Preemption"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "The PCIe link speed is a crucial factor in determining the data transfer rate between the graphics card and the motherboard. Adjusting this setting could potentially impact the performance and communication speed of the graphics card within the system.",
+                        "Icon": null,
+                        "HasActionIcon": false,
+                        "IsClickEnabled": false,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": false,
+                        "UniqueID": "PCIeLinkSpeed"
                     }
                 ]
             },
@@ -320,11 +342,50 @@
                 "Title": "WindowsPrioritySeparation",
                 "Description": "Optimize system performance for programs by adjusting priority settings.",
                 "Icon": "\uE9F5",
-                "HasActionIcon": true,
+                "HasActionIcon": false,
                 "IsClickEnabled": false,
                 "IsEnabled": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "WindowsPrioritySeparation"
+            }
+        ]
+    },
+    {
+        "UniqueID": "HomePage.SettingsGroups.Network",
+        "GroupName": "Network",
+        "Items": [
+            {
+                "Type": "SettingsCard",
+                "Title": "Quality of Service - QOS",
+                "Description": "QoS is designed to prioritize different types of traffic based on their importance, ensuring a smoother experience for critical applications. If QoS is disabled, all data is treated more uniformly, potentially leading to less efficient bandwidth distribution and increased competition for resources.",
+                "Icon": "\uF193",
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": false,
+                "UniqueID": "QualityofService"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "LanmanServer Service Settings",
+                "Description": "They disable automatic disconnection of idle network connections, set the file cache size to a specific limit, turn off opportunistic locks to prevent certain locking issues, configure the I/O Request Packet (IRP) stack size, and adjust parameters related to sharing violation retries and delays. These changes aim to optimize file sharing and network performance.",
+                "Icon": "\uEDA3",
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "LanmanServiceSettings"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Optimizing Network Settings for Enhanced Performance",
+                "Description": "These optimizations include adjusting parameters related to TCP connections, packet handling, and network prioritization. Additionally, settings for the Message Queuing service (MSMQ), multimedia system profile, and network throttling are configured for enhanced performance. The adjustments cover parameters for both the workstation and server components, ensuring efficient network utilization and responsiveness. These tweaks aim to provide a smoother networking experience by fine-tuning parameters such as thread count, command limits, and buffer sizes, ultimately improving the overall efficiency of network communication on the Windows system.",
+                "Icon": "\uE968",
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "NetworkService"
             }
         ]
     }

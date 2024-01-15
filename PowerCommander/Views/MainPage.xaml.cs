@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
+using PowerCommander.Helpers;
 using PowerCommander.ViewModels;
 
 namespace PowerCommander.Views;
@@ -15,11 +16,14 @@ public sealed partial class MainPage : Page
     /// </summary>
     public MainPage()
     {
-        // ViewModel Service
-        ViewModel = App.GetService<MainViewModel>();
-
         // InitializeComponent
         InitializeComponent();
+
+        // Attach the event handler to the Loaded event of the RootGrid.
+        RootGrid.Loaded += RootGrid_Loaded;
+
+        // ViewModel Service
+        ViewModel = App.GetService<MainViewModel>();
 
         // Extend content into titlebar
         App.MainWindow.ExtendsContentIntoTitleBar = true;
@@ -29,6 +33,17 @@ public sealed partial class MainPage : Page
 
         // Start the asynchronous execution of the ViewModel's initialization command for the page.
         Task.Run(() =>
-            ViewModel.InitializeViewModelAsyncCommand.Execute(this));
+             ViewModel.InitializeViewModelAsyncCommand.Execute(this));
     }
+
+    /// <summary>
+    /// Event handler called when the RootGrid is loaded.
+    /// </summary>
+    /// <param name="sender">The object that triggered the event.</param>
+    /// <param name="e">The event arguments.</param>
+    private void RootGrid_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) =>
+        // Initialize the ContentDialogExtension with the XamlRoot of the RootGrid.
+        ContentDialogExtension.Initialize(RootGrid.XamlRoot);
+
+
 }

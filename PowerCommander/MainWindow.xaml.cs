@@ -45,6 +45,7 @@ public sealed partial class MainWindow : WindowEx
 
         // Apply custom style to the mainWindow(appHeight, appWidth)
         SetWindowProperties(800, 576);
+
     }
 
     /// <summary>

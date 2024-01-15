@@ -7,11 +7,17 @@
     xmlns:models="using:PowerCommander.Models"
     xmlns:helpers="using:PowerCommander.Helpers"
     xmlns:winui="using:WinUICommunity"
+    NavigationCacheMode="Disabled"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <!-- Converters -->
+        <winui:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <!-- DataTemplate for SettingsItem -->
         <DataTemplate x:DataType="models:SettingsItem" x:Key="SettingsCardTemplate">
-            <winui:SettingsCard Header="{x:Bind Title, Mode=OneWay}"  IsActionIconVisible="{x:Bind HasActionIcon, Mode=OneWay}" IsEnabled="{x:Bind IsEnable, Mode=OneWay}" IsClickEnabled="{x:Bind IsClickEnable, Mode=OneWay}">
+            <!-- SettingsCard Template -->
+            <winui:SettingsCard Header="{x:Bind Title, Mode=OneWay}" IsActionIconVisible="{x:Bind HasActionIcon, Mode=OneWay}" IsEnabled="{x:Bind IsEnable, Mode=OneWay}" IsClickEnabled="{x:Bind IsClickEnable, Mode=OneWay}">
                 <winui:SettingsCard.HeaderIcon>
                     <FontIcon Glyph="{x:Bind Icon, Mode=OneWay}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
                 </winui:SettingsCard.HeaderIcon>
@@ -21,37 +27,57 @@
                 <ToggleSwitch IsOn="{x:Bind ToggleSwitchState, Mode=TwoWay}" OffContent="" OnContent="" />
             </winui:SettingsCard>
         </DataTemplate>
+
+        <!-- DataTemplate for SettingsExpander -->
         <DataTemplate x:Key="SettingsExpanderTemplate" x:DataType="models:SettingsItem">
-            <winui:SettingsExpander Header="{x:Bind Title}" Description="{x:Bind Description}" IsExpanded="{x:Bind IsExpanded}" IsEnabled="{x:Bind IsEnable}" HeaderIcon="{x:Bind Icon}">
-                <ItemsControl ItemsSource="{x:Bind SettingsExpanderItem}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <winui:SettingsCard CornerRadius="0" BorderThickness="0,1,0,0" Padding="60,20,20,20">
-                                <winui:SettingsCard.Description>
-                                    <TextBlock Text="{Binding Description, Mode=OneWay}" ToolTipService.ToolTip="{Binding Description, Mode=OneWay}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
-                                </winui:SettingsCard.Description>
-                                <winui:SettingsCard.HeaderIcon>
-                                    <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
-                                </winui:SettingsCard.HeaderIcon>
-                                <CheckBox HorizontalAlignment="Right" IsChecked="{Binding ToggleSwitchState, Mode=TwoWay}" />
-                            </winui:SettingsCard>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <!-- SettingsExpander Template -->
+            <winui:SettingsExpander Header="{x:Bind Title}"  IsExpanded="{x:Bind IsExpanded}" IsEnabled="{x:Bind IsEnable}">
+                <winui:SettingsExpander.HeaderIcon>
+                    <FontIcon Glyph="{x:Bind Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                </winui:SettingsExpander.HeaderIcon>
+                <winui:SettingsExpander.Description>
+                    <TextBlock Text="{Binding Description, Mode=OneWay}" ToolTipService.ToolTip="{Binding Description, Mode=OneWay}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
+                </winui:SettingsExpander.Description>
+                <winui:SettingsExpander.ItemsHeader>
+                    <InfoBar IsOpen="{x:Bind Notification_IsOpen, Mode=OneWay}"
+                             Message="{x:Bind Notification_Message, Mode=OneWay}"
+                             Title="{x:Bind Notification_Title, Mode=OneWay}"
+                             CornerRadius="0"
+                             IsClosable="{x:Bind Notification_IsClosable, Mode=OneWay}" />
+                </winui:SettingsExpander.ItemsHeader>
+                <winui:SettingsExpander.Items>
+                    <ItemsControl ItemsSource="{x:Bind SettingsExpanderItem}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <winui:SettingsCard CornerRadius="0" BorderThickness="0,1,0,0" Padding="60,20,20,20">
+                                    <winui:SettingsCard.HeaderIcon>
+                                        <FontIcon Glyph="{Binding Icon, Mode=OneWay}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                                    </winui:SettingsCard.HeaderIcon>
+                                    <winui:SettingsCard.Description>
+                                        <TextBlock Text="{Binding Description, Mode=OneWay}" ToolTipService.ToolTip="{Binding Description, Mode=OneWay}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
+                                    </winui:SettingsCard.Description>
+                                    <CheckBox HorizontalAlignment="Right" IsChecked="{Binding ToggleSwitchState, Mode=TwoWay}" />
+                                </winui:SettingsCard>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </winui:SettingsExpander.Items>
+                <ToggleSwitch OffContent="" OnContent="" Visibility="{x:Bind ExpanderSwitchVisibility, Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{x:Bind ExpanderSwitchState, Mode=OneWay}" />
             </winui:SettingsExpander>
         </DataTemplate>
 
+        <!-- SettingsTemplateSelector -->
         <helpers:SettingsTemplateSelector
             x:Key="SettingsElementTemplateSelector"
             SettingsCardTemplate="{StaticResource SettingsCardTemplate}"
             SettingsExpanderTemplate="{StaticResource SettingsExpanderTemplate}"
             />
-
     </Page.Resources>
 
+    <!-- Main Grid -->
     <Grid>
+        <!-- Grid Rows -->
         <Grid.RowDefinitions>
-
             <!-- Title Bar Row -->
             <RowDefinition Height="38" />
 
@@ -64,48 +90,94 @@
 
         <!-- TitleBar -->
         <Grid x:Name="AppTitleBar" Canvas.ZIndex="1" Grid.Row="0" Margin="10,0,0,0" >
+            <!-- TitleBar Content -->
             <Image Source="/Assets/WindowIcon.ico" HorizontalAlignment="Left" Width="24" Height="24" />
             <TextBlock Text="PowerCommander" FontWeight="SemiBold" Margin="38,0,0,0" VerticalAlignment="Center" TextWrapping="NoWrap" Style="{StaticResource CaptionTextBlockStyle}" />
         </Grid>
 
+
         <!-- Main Content Grid -->
         <Grid Grid.Row="1">
-            <Grid Margin="15,10,15,0" Padding="10" VerticalAlignment="Top">
-                <!-- Recommend Actions -->
-                <StackPanel Orientation="Horizontal" Spacing="0" >
-                    <Button  ToolTipService.ToolTip="Apply Recommended Tweaks">
-                        <SymbolIcon Symbol="DockBottom" />
-                    </Button>
-                </StackPanel>
+            <!-- Grid Rows for Main Content -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Margin="15,10,15,0" Padding="10" VerticalAlignment="Top" Grid.Row="0">
 
-                <!-- Settings -->
-                <Button  HorizontalAlignment="Right">
-                    <SymbolIcon Symbol="Setting" />
-                </Button>
+                <!-- Recommend Actions & Settings -->
+                <ScrollView Grid.Row="0" Margin="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Recommend Actions & Settings -->
+                        <Grid Grid.Row="0">
+                            <!-- Recommend Actions -->
+                            <StackPanel Orientation="Horizontal" Spacing="1" >
+                                <Button ToolTipService.ToolTip="Basic" CornerRadius="6,0,0,6">
+                                    <FontIcon Glyph="&#xEC48;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                                </Button>
+                                <Button ToolTipService.ToolTip="Recommended Tweaks" CornerRadius="2">
+                                    <FontIcon Glyph="&#xEC49;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                                </Button>
+                                <Button ToolTipService.ToolTip="Extreme performance" CornerRadius="0,6,6,0">
+                                    <FontIcon Glyph="&#xEC4A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                                </Button>
+                            </StackPanel>
+
+                            <!-- Settings -->
+                            <Button HorizontalAlignment="Right" Command="{x:Bind ViewModel.GoToSettingsViewModelCommand}">
+                                <SymbolIcon Symbol="Setting" />
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </ScrollView>
             </Grid>
 
-            <StackPanel>
-                <!-- About your pc -->
-                <ListView Margin="{StaticResource NavigationViewPageContentMargin}" IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.AboutYourPC, Mode=OneWay}"
-                          ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
-                    <ListView.Header>
-                        <winui:SimpleSettingsGroup Header="About your pc" Margin="20,0,0,0" />
-                    </ListView.Header>
-                </ListView>
+            <!-- ScrollView for ListViews -->
+            <ScrollView Grid.Row="1"  Margin="0,0,0,30">
+                <!-- StackPanel for ListViews -->
+                <StackPanel>
+                    <!-- Gamemode ListView -->
+                    <ListView IsItemClickEnabled="False" Grid.Row="1" SelectionMode="None" ItemsSource="{x:Bind ViewModel.GamemodeTweaks, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}" Margin="0,10,0,0" />
 
-                <!-- Power -->
-                <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.Power, Mode=OneWay}"
-                          ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
-                    <ListView.Header>
-                        <winui:SimpleSettingsGroup Header="Power" Margin="20,0,0,0" />
-                    </ListView.Header>
-                </ListView>
-            </StackPanel>
+                    <!-- SecurityAndPrivacy ListView -->
+                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.SecurityAndPrivacy, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
+                        <ListView.Header>
+                            <winui:SimpleSettingsGroup Header="Security And Privacy" Margin="20,0,0,0" />
+                        </ListView.Header>
+                    </ListView>
 
+                    <!-- Power ListView -->
+                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.Power, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
+                        <ListView.Header>
+                            <winui:SimpleSettingsGroup Header="Power" Margin="16,0,12,2">
+                                <InfoBar IsOpen="True"
+                                         IsClosable="False"
+                                         Title="Note:"
+                                         Severity="Warning"
+                                         Message="Some of these tweaks are disabled when using a laptop to preserve battery life." />
+                            </winui:SimpleSettingsGroup>
+                        </ListView.Header>
+                    </ListView>
+
+                    <!-- OtherTweaks ListView -->
+                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.OtherTweak, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
+                        <ListView.Header>
+                            <winui:SimpleSettingsGroup Header="Other Tweaks" Margin="16,0,12,2" />
+                        </ListView.Header>
+                    </ListView>
+
+                </StackPanel>
+            </ScrollView>
         </Grid>
 
         <!-- Bottom Bar -->
         <Grid Background="{ThemeResource CardBackgroundFillColorDefault}" Grid.Row="2" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
+            <!-- Grid Columns for Bottom Bar -->
             <Grid.ColumnDefinitions>
                 <!-- Left Side -->
                 <ColumnDefinition Width="Auto" />
@@ -117,18 +189,17 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Left Side -->
+            <!-- Left Side - PersonPicture -->
             <PersonPicture PreferSmallImage="True" Width="50" HorizontalAlignment="Left" />
 
-            <!-- Left Side Centered -->
+            <!-- Left Side Centered - User Info -->
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Column="1" Margin="10,0,0,0">
                 <TextBlock Text="SkullDeath" FontWeight="SemiBold" IsColorFontEnabled="True" Foreground="CornflowerBlue" />
                 <TextBlock Text="CurrentEmail@gmail.com" Style="{StaticResource CaptionTextBlockStyle}" FontSize="12" />
             </StackPanel>
 
-            <!-- Right Side -->
+            <!-- Right Side - Run Scripts Button -->
             <Button Grid.Column="2" HorizontalAlignment="Right" Content="Run Scripts" FontWeight="SemiBold" Style="{StaticResource AccentButtonStyle}" />
         </Grid>
     </Grid>
-
 </Page>

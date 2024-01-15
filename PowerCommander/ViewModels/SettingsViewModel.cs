@@ -15,51 +15,65 @@ namespace PowerCommander.ViewModels;
 
 public partial class SettingsViewModel : ObservableRecipient
 {
+    #region Private Const properties
+
+    /// <summary>
+    /// Service used for navigation purposes.
+    /// </summary>
+    private readonly INavigationService _navigationService;
+
+    /// <summary>
+    /// Service used for changing theme in runtime.
+    /// </summary>
     private readonly IThemeSelectorService _themeSelectorService;
 
+    #endregion
+
+    #region Public properrties
     [ObservableProperty]
     private ElementTheme _elementTheme;
 
-    [ObservableProperty]
-    private string _versionDescription;
+    #endregion
 
+    #region Commands
     public ICommand SwitchThemeCommand
     {
         get;
     }
+    #endregion
 
-    public SettingsViewModel(IThemeSelectorService themeSelectorService)
+    /// <summary>
+    /// Main Constructor
+    /// </summary>
+    /// <param name="themeSelectorService">Service for changing the theme dynamically</param>
+    /// <param name="navigationService">Service for navigation purposes</param>
+    public SettingsViewModel(IThemeSelectorService themeSelectorService, INavigationService navigationService)
     {
+        // Initialize themeSelectorService and other properties
         _themeSelectorService = themeSelectorService;
         _elementTheme = _themeSelectorService.Theme;
-        _versionDescription = GetVersionDescription();
+        _navigationService = navigationService;
 
+        // Initialize the SwitchThemeCommand with RelayCommand
         SwitchThemeCommand = new RelayCommand<ElementTheme>(
-            async (param) =>
-            {
-                if (ElementTheme != param)
-                {
+            async (param) => {
+                // Switch theme only if the selected theme is different
+                if (ElementTheme != param) {
                     ElementTheme = param;
                     await _themeSelectorService.SetThemeAsync(param);
                 }
             });
     }
 
-    private static string GetVersionDescription()
-    {
-        Version version;
+    #region private members
 
-        if (RuntimeHelper.IsMSIX)
-        {
-            var packageVersion = Package.Current.Id.Version;
+    /// <summary>
+    /// Navigate to MainPage
+    /// </summary>
+    [RelayCommand]
+    private void NavigateToMainPage() =>
+        _navigationService.NavigateTo(typeof(MainViewModel).FullName!);
 
-            version = new(packageVersion.Major, packageVersion.Minor, packageVersion.Build, packageVersion.Revision);
-        }
-        else
-        {
-            version = Assembly.GetExecutingAssembly().GetName().Version!;
-        }
 
-        return $"{"AppDisplayName".GetLocalized()} - {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
-    }
+    #endregion
 }

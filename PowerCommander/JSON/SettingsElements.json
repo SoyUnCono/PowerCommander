@@ -4,64 +4,86 @@
         "GroupName": "SecurityAndPrivacy",
         "Items": [
             {
-                "Type": "SettingsExpander",
-                "Title": "Additional Security Settings",
-                "Description": "Explore additional security settings for your system.",
-                "Icon": "\uE716",
-                "HasActionIcon": false,
-                "IsClickEnable": false,
-                "IsEnable": true,
-                "UniqueID": "AdditionalSecuritySettings",
-                "IsExpanded": true,
-                "SettingsExpanderItem": [
-                    {
-                        "Type": "SettingsCard",
-                        "Title": "Firewall Settings",
-                        "Description": "Configure your firewall settings for enhanced security.",
-                        "Icon": "\uE721",
-                        "HasActionIcon": false,
-                        "IsClickEnable": true,
-                        "IsEnable": true,
-                        "ToggleSwitchState": true,
-                        "UniqueID": "FirewallSettings"
-                    },
-                    {
-                        "Type": "SettingsCard",
-                        "Title": "Antivirus Configuration",
-                        "Description": "Adjust your antivirus settings to ensure optimal protection.",
-                        "Icon": "\uE77F",
-                        "HasActionIcon": true,
-                        "IsClickEnable": false,
-                        "IsEnable": true,
-                        "ToggleSwitchState": false,
-                        "UniqueID": "AntivirusConfiguration"
-                    }
-                ]
-            },
-            {
                 "Type": "SettingsCard",
                 "Title": "Disable UAC",
                 "Description": "UAC works by notifying users when a program or application attempts to make changes that require administrative privileges. This notification appears in the form of a pop-up window, and the user must explicitly confirm or deny the action by providing administrator credentials or approving the operation.",
                 "HasActionIcon": false,
                 "Icon": "\uE716",
-                "IsClickEnable": false,
-                "IsEnable": true,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
                 "ToggleSwitchState": true,
-                "UniqueID": "DisableUAC"
+                "UniqueID": "UAC"
             },
             {
                 "Type": "SettingsCard",
                 "Title": "Disable Telemetry",
                 "Description": "Disabling telemetry in Windows involves turning off the collection and transmission of diagnostic and usage data from the operating system to Microsoft. Telemetry is used to enhance software quality, identify issues, and make adjustments based on user performance and experience. Disabling it restricts the amount of information Windows sends to Microsoft.",
                 "HasActionIcon": false,
-                "Icon": "\uE753",
-                "IsClickEnable": false,
-                "IsEnable": true,
+                "Icon": "\uE7B3",
+                "IsClickEnabled": false,
+                "IsEnabled": true,
                 "ToggleSwitchState": true,
-                "UniqueID": "DisableTelemetry"
+                "UniqueID": "Telemetry"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Windows Search Tracker",
+                "Description": "While this improves privacy by preventing the storage of search history, it's important to note that you won't have access to a record of your previous searches, and certain features relying on this history for suggestions may be affected.",
+                "HasActionIcon": false,
+                "Icon": "\uEDE4",
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": false,
+                "UniqueID": "SearchTracker"
+            },
+            {
+                "Type": "SettingsExpander",
+                "Title": "Additional Security Settings",
+                "Description": "Explore additional security settings for your system.",
+                "Icon": null,
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "UniqueID": "AdditionalSecuritySettings",
+                "IsExpanded": true,
+                "ExpanderSwitchVisibility": false,
+                "ExpanderSwitchState": false,
+                "SettingsExpanderItem": [
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "Delete Firewall rules",
+                        "Icon": "\uEE77",
+                        "HasActionIcon": false,
+                        "IsClickEnabled": true,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": false,
+                        "UniqueID": "FirewallSettings"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "Disable Windows Defender Antivirus",
+                        "Icon": "\uEA18",
+                        "HasActionIcon": true,
+                        "IsClickEnabled": false,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": true,
+                        "UniqueID": "AntivirusConfiguration"
+                    }
+                ]
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Core Isolation",
+                "Description": "Core isolation is a security feature that enhances system security by isolating critical processes from the rest of the system. Disabling this feature may impact the security measures provided by core isolation.",
+                "HasActionIcon": false,
+                "Icon": "\uE876",
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": false,
+                "UniqueID": "CoreIsolation"
             }
-
-
         ]
     },
     {
@@ -73,11 +95,236 @@
                 "Title": "Disable Hibernation",
                 "Description": "Hibernation is a power-saving feature in Windows that allows the system to save the current state, including opened files and running applications, to the hard disk before shutting down. When the computer is powered on again, it can quickly resume from the hibernated state, restoring everything to exactly where it was. Disabling hibernation can potentially improve system performance by reclaiming storage space on the hard disk that would otherwise be occupied by the hibernation file (hiberfil.sys). This file is typically as large as the amount of RAM installed in the system. If your device has ample RAM and you don't frequently use hibernation, disabling it might free up valuable storage and reduce the write activity on your storage device.",
                 "HasActionIcon": false,
-                "Icon": "\uE865",
-                "IsClickEnable": false,
-                "IsEnable": true,
+                "Icon": "\uE8BE",
+                "IsClickEnabled": false,
+                "IsEnabled": true,
                 "ToggleSwitchState": true,
-                "UniqueID": "DisableHibernation"
+                "UniqueID": "Hibernation"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Power Throttling",
+                "Description": "While power throttling is generally beneficial for energy conservation, there are situations where users may consider disabling it to improve performance. Disabling power throttling can be advantageous when running resource-intensive applications that require maximum CPU performance, such as video editing, 3D rendering, or gaming. In these scenarios, users may prioritize performance over energy efficiency, accepting the trade-off of increased power consumption and potentially shorter battery life for a more responsive and powerful computing experience.",
+                "HasActionIcon": false,
+                "Icon": "\uE945",
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": false,
+                "UniqueID": "PowerThrottling"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Network Throttling",
+                "Description": "Network throttling is a mechanism that intentionally limits the data transfer rate between a device and a network. It is often used to control or simulate network conditions for testing purposes. However, disabling network throttling can be beneficial in certain scenarios where users seek to maximize data transfer speed and reduce latency. By deactivating throttling, users can potentially achieve faster and more responsive network performance, particularly in situations where network testing constraints are not a concern.",
+                "HasActionIcon": false,
+                "Icon": "\uE839",
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "NetworkThrottling"
+            },
+            {
+                "Type": "SettingsExpander",
+                "Title": "Power Plan Options",
+                "Description": "Select what power plan you want to install in the current system.",
+                "Icon": "\uE781",
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "UniqueID": "PowerPlanOptions",
+                "IsExpanded": true,
+                "ExpanderSwitchVisibility": false,
+                "ExpanderSwitchState": false,
+                "SettingsExpanderItem": [
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "Install CommanderPowerPlan with IDLE",
+                        "Icon": null,
+                        "HasActionIcon": false,
+                        "IsClickEnabled": true,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": true,
+                        "UniqueID": "PowerPlanIDLE"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "Install CommanderPowerPlan without IDLE",
+                        "Icon": null,
+                        "HasActionIcon": true,
+                        "IsClickEnabled": false,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": false,
+                        "UniqueID": "PowerPlanWithoutIDLE"
+                    }
+                ]
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Sleep",
+                "Description": "Sleep is a low-power state that conserves energy by shutting down most hardware activity while retaining system information. Disabling this option may prevent the system from entering the sleep state as scheduled, impacting energy efficiency. It could also affect the time it takes for the system to resume activity after periods of inactivity, as it won't leverage the benefits of the sleep state for a quicker wake-up.",
+                "HasActionIcon": false,
+                "Icon": "\uEC46",
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "Sleep"
+            }
+        ]
+    },
+    {
+        "UniqueID": "HomePage.SettingsGroups.Gamemode",
+        "GroupName": "Gamemode",
+        "Items": [
+            {
+                "Type": "SettingsExpander",
+                "Title": "Gamemode",
+                "Description": "Experience gaming at its peak with our Game Mode feature. Optimize system resources, eliminate interruptions, and dominate the gaming realm with a touch.",
+                "Icon": "\uE7FC",
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "UniqueID": "GamemodeTweak",
+                "Notification_IsOpen": true,
+                "Notification_Title": "Note:",
+                "Notification_Message": "Changes to these settings will only take effect when PowerCommander is open and Game Mode is active. Do not make any alterations if you are unsure of what you are modifying.",
+                "IsExpanded": false,
+                "ExpanderSwitchVisibility": true,
+                "ExpanderSwitchState": false,
+                "SettingsExpanderItem": [
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "AutoDetect when playing",
+                        "Icon": null,
+                        "HasActionIcon": false,
+                        "IsClickEnabled": true,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": true,
+                        "UniqueID": "AutoGame"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "UniqueID": "HomePage.SettingsGroups.OtherSettings",
+        "GroupName": "OtherTweaks",
+        "Items": [
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Driver Searching",
+                "Description": "While this may avoid potential issues from incompatible or problematic driver updates, it also means users need to manually manage driver updates, potentially missing out on enhancements and optimizations introduced by the latest driver versions.",
+                "Icon": "\uE835",
+                "HasActionIcon": false,
+                "IsClickEnabled": true,
+                "IsEnabled": true,
+                "ToggleSwitchState": false,
+                "UniqueID": "DriverSearching"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Disable Suggested actions",
+                "Description": "By deactivating this feature, users eliminate automatic suggestions for actions related to clipboard content, providing a more traditional clipboard experience.",
+                "Icon": "\uE897",
+                "HasActionIcon": false,
+                "IsClickEnabled": true,
+                "IsEnabled": true,
+                "ToggleSwitchState": false,
+                "UniqueID": "SuggestedActions"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Stop apps running in the background",
+                "Description": "This means that all apps will be prevented from running in the background, potentially impacting their ability to provide real-time notifications or perform background tasks.",
+                "Icon": "\uE8B3",
+                "HasActionIcon": false,
+                "IsClickEnabled": true,
+                "IsEnabled": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "BackgroundApps"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Fix FullScreenExclusive",
+                "Description": "FSE or FullScreenExclusive its a graphics presentation mode where a software application has complete and exclusive control over the user's screen. In this mode, the application can occupy the entire screen without interruption from other operating system elements, such as taskbars or windows from other applications.",
+                "Icon": "\uE7B5",
+                "HasActionIcon": false,
+                "IsClickEnabled": true,
+                "IsEnabled": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "FullScreenExclusive"
+            },
+            {
+                "Type": "SettingsExpander",
+                "Title": "Nvidia Options",
+                "Description": "Select different NVIDIA graphics options.",
+                "Icon": "\uF211",
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "UniqueID": "NvidiaOptions",
+                "IsExpanded": true,
+                "ExpanderSwitchVisibility": false,
+                "ExpanderSwitchState": false,
+                "SettingsExpanderItem": [
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "Forcing P0 State may lead to increased performance, but users should exercise caution as it can also result in higher power consumption and heat generation.",
+                        "Icon": null,
+                        "HasActionIcon": false,
+                        "IsClickEnabled": true,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": true,
+                        "UniqueID": "P0State"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "HDCP is a security feature that encrypts audiovisual content during transmission to prevent unauthorized interception or copying.",
+                        "Icon": null,
+                        "HasActionIcon": true,
+                        "IsClickEnabled": false,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": true,
+                        "UniqueID": "HDCP"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "This setting is intended to activate an older version of NVIDIA sharpening, potentially chosen for specific compatibility or preference considerations.",
+                        "Icon": null,
+                        "HasActionIcon": true,
+                        "IsClickEnabled": false,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": false,
+                        "UniqueID": "NvidiaSharpening"
+                    },
+                    {
+                        "Type": "SettingsCard",
+                        "Title": null,
+                        "Description": "This setting prevents the NVIDIA tray icon from automatically starting during user login.",
+                        "Icon": null,
+                        "HasActionIcon": true,
+                        "IsClickEnabled": false,
+                        "IsEnabled": true,
+                        "ToggleSwitchState": true,
+                        "UniqueID": "NvidiaTrayIcon"
+                    }
+                ]
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "WindowsPrioritySeparation",
+                "Description": "Optimize system performance for programs by adjusting priority settings.",
+                "Icon": "\uE9F5",
+                "HasActionIcon": true,
+                "IsClickEnabled": false,
+                "IsEnabled": true,
+                "ToggleSwitchState": true,
+                "UniqueID": "WindowsPrioritySeparation"
             }
         ]
     }

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Newtonsoft.Json;
+using PowerCommander.Contracts.Services;
 using PowerCommander.Models;
 namespace PowerCommander.ViewModels;
 
@@ -13,36 +14,56 @@ public partial class MainViewModel : ObservableRecipient
     /// </summary>
     private readonly string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "JSON", "SettingsElements.json");
 
+    /// <summary>
+    /// Service used for navigation purposes.
+    /// </summary>
+    private readonly INavigationService _navigationService;
+
     #endregion
 
     #region Public properties
 
     /// <summary>
-    /// Displayed settings tweaks on the view.
+    /// Displayed SecurityAndPrivacy tweaks on the view.
     /// </summary>
-    [ObservableProperty] private List<SettingsItem>? _aboutYourPC;
+    [ObservableProperty] private List<SettingsItem>? _securityAndPrivacy;
 
     /// <summary>
-    /// Displayed settings tweaks on the view.
+    /// Displayed power tweaks on the view.
     /// </summary>
     [ObservableProperty] private List<SettingsItem>? _power;
+
+    /// <summary>
+    /// Displayed Gamemode tweaks on the view.
+    /// </summary>
+    [ObservableProperty] private List<SettingsItem>? _gamemodeTweaks;
+
+    /// <summary>
+    /// Displayed other tweaks on the view.
+    /// </summary>
+    [ObservableProperty] private List<SettingsItem>? _otherTweak;
 
     #endregion
 
     /// <summary>
     /// Main constructor for the MainViewModel class.
     /// </summary>
-    public MainViewModel()
+    public MainViewModel(INavigationService navigationService)
     {
+        // Initialize navigationService
+        _navigationService = navigationService;
+
         // Initialize the SettingsCard list
-        AboutYourPC = new List<SettingsItem>();
+        SecurityAndPrivacy = new List<SettingsItem>();
         Power = new List<SettingsItem>();
+        GamemodeTweaks = new List<SettingsItem>();
+        OtherTweak = new List<SettingsItem>();
 
         // Call the method to fetch the data into the listview
-        FetchJSONData("SecurityAndPrivacy", AboutYourPC);
-
-        // Call the method to fetch the data into the listview
+        FetchJSONData("SecurityAndPrivacy", SecurityAndPrivacy);
         FetchJSONData("Power", Power);
+        FetchJSONData("Gamemode", GamemodeTweaks);
+        FetchJSONData("OtherTweaks", OtherTweak);
     }
 
     #region private members
@@ -56,11 +77,12 @@ public partial class MainViewModel : ObservableRecipient
     private void FetchJSONData(string targetGroupName, List<SettingsItem> targetSettingsList)
     {
         try {
+
             // Read the content from the JSON file
             var jsonContent = File.ReadAllText(path);
 
             // Deserialize the JSON into a list of SettingsGroups
-            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(jsonContent);
+            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(value: jsonContent);
 
             // Find the SettingsGroup with the specified 'GroupName'
             var targetGroup = settingsGroups?.FirstOrDefault(group => group?.GroupName == targetGroupName);
@@ -81,7 +103,12 @@ public partial class MainViewModel : ObservableRecipient
         }
     }
 
-
+    /// <summary>
+    /// Navigate to SettingsPage
+    /// </summary>
+    [RelayCommand]
+    private void GoToSettingsViewModel() =>
+        _navigationService.NavigateTo(typeof(SettingsViewModel).FullName!);
 
     /// <summary>
     /// Initializes the ViewModel asynchronously, sets various properties, and updates UI elements.
@@ -91,5 +118,7 @@ public partial class MainViewModel : ObservableRecipient
     {
 
     }
+
+
     #endregion
 }

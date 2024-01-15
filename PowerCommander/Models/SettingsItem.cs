@@ -1,7 +1,12 @@
-﻿namespace PowerCommander.Models;
+﻿using Microsoft.UI.Xaml;
+
+namespace PowerCommander.Models;
 
 public class SettingsItem
 {
+    /// <summary>
+    /// Gets or sets the type of the settings item .
+    /// </summary>
     public enum SettingsItemType
     {
         SettingsCard,
@@ -59,7 +64,57 @@ public class SettingsItem
     public bool IsExpanded { get; set; }
 
     /// <summary>
+    /// Gets or sets a value indicating whether the notification is currently open.
+    /// </summary>
+    public bool Notification_IsOpen { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the notification can be closed.
+    /// </summary>
+    public bool Notification_IsClosable { get; set; }
+
+    /// <summary>
+    /// Gets or sets the title of the notification.
+    /// </summary>
+    public string? Notification_Title { get; set; }
+
+    /// <summary>
+    /// Gets or sets the message content of the notification.
+    /// </summary>
+    public string? Notification_Message { get; set; }
+
+    /// <summary>
+    /// Gets or sets the visibility of the expander switch.
+    /// </summary>
+    public bool ExpanderSwitchVisibility { get; set; }
+
+    /// <summary>
+    /// Gets or sets the state of the expander switch.
+    /// </summary>
+    public bool ExpanderSwitchState { get; set; }
+
+    /// <summary>
     /// Gets or sets a list of settings items within the expander (if applicable).
     /// </summary>
     public List<SettingsItem>? SettingsExpanderItem { get; set; }
+
+    /// <summary>
+    /// Main Constructor
+    /// </summary>
+    public SettingsItem()
+    {
+        // Set Notification Properties
+        // Indicates whether the notification is open or closed
+        Notification_IsOpen = false;
+
+        // Indicates whether the notification can be closed
+        Notification_IsClosable = false;
+
+        // Enables the notification
+        IsEnable = true;
+
+        // Indicates whether the notification has an action icon
+        HasActionIcon = false;
+
+    }
 }

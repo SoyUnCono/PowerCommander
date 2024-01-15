@@ -43,8 +43,8 @@ public sealed partial class MainWindow : WindowEx
         _settings = new UISettings();
         _settings.ColorValuesChanged += Settings_ColorValuesChanged; // Unable to use FrameworkElement.ActualThemeChanged event
 
-        // Apply custom style to the mainWindow
-        SetWindowProperties(700, 522);
+        // Apply custom style to the mainWindow(appHeight, appWidth)
+        SetWindowProperties(800, 576);
     }
 
     /// <summary>
@@ -69,11 +69,16 @@ public sealed partial class MainWindow : WindowEx
         // Overlap the current presenter
         var presenter = appWindow.Presenter as OverlappedPresenter;
 
-        // Set window properties: IsMaximizable, IsMinimizable, IsResizable, IsAlwaysOnTop
-        presenter!.IsMaximizable = false;
-        presenter.IsMinimizable = false;
-        presenter.IsResizable = false;
-        presenter.IsAlwaysOnTop = true;
+        // if presenter is not null..
+        if (presenter != null) {
+
+            // Set window properties: IsMaximizable, IsMinimizable, IsResizable, IsAlwaysOnTop
+            presenter.IsMaximizable = false;
+            presenter.IsMinimizable = false;
+            presenter.IsResizable = false;
+            presenter.IsAlwaysOnTop = true;
+
+        }
     }
 
     /// <summary>
@@ -82,11 +87,7 @@ public sealed partial class MainWindow : WindowEx
     /// </summary>
     /// <param name="sender">The sender object.</param>
     /// <param name="args">The event arguments.</param>
-    private void Settings_ColorValuesChanged(UISettings sender, object args)
-    {
+    private void Settings_ColorValuesChanged(UISettings sender, object args) =>
         // This call comes off-thread; hence, we need to dispatch it to the current app's thread
-        _dispatcherQueue.TryEnqueue(() => {
-            TitleBarHelper.ApplySystemThemeToCaptionButtons();
-        });
-    }
+        _dispatcherQueue.TryEnqueue(TitleBarHelper.ApplySystemThemeToCaptionButtons);
 }

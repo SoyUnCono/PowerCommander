@@ -103,7 +103,7 @@ public class SettingsItem
     /// </summary>
     public SettingsItem()
     {
-        // Set Notification Properties
+
         // Indicates whether the notification is open or closed
         Notification_IsOpen = false;
 

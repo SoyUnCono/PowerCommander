@@ -77,7 +77,7 @@ public sealed partial class MainWindow : WindowEx
             presenter.IsMaximizable = false;
             presenter.IsMinimizable = false;
             presenter.IsResizable = false;
-            presenter.IsAlwaysOnTop = true;
+            presenter.IsAlwaysOnTop = false;
 
         }
     }

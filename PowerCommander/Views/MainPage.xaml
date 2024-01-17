@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="using:PowerCommander.Models"
     xmlns:helpers="using:PowerCommander.Helpers"
     xmlns:winui="using:WinUICommunity"
     mc:Ignorable="d">
@@ -16,6 +15,7 @@
             SettingsCardTemplate="{StaticResource SettingsCardTemplate}"
             SettingsExpanderTemplate="{StaticResource SettingsExpanderTemplate}"
             />
+
     </Page.Resources>
 
     <!-- Main Grid -->
@@ -39,6 +39,8 @@
             <TextBlock Text="PowerCommander" FontWeight="SemiBold" Margin="38,0,0,0" VerticalAlignment="Center" TextWrapping="NoWrap" Style="{StaticResource CaptionTextBlockStyle}" />
         </Grid>
 
+        <!-- Growls -->
+        <StackPanel winui:Growl.GrowlParent="True" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="20" Grid.RowSpan="3" Canvas.ZIndex="20" />
 
         <!-- Main Content Grid -->
         <Grid Grid.Row="1">
@@ -47,10 +49,12 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid Margin="15,10,15,0" Padding="10" VerticalAlignment="Top" Grid.Row="0">
+
+            <!-- Panel Header -->
+            <Grid Margin="15,10,15,0" Padding="10" VerticalAlignment="Top" Grid.Row="0" >
 
                 <!-- Recommend Actions & Settings -->
-                <ScrollView Grid.Row="0" Margin="0">
+                <ScrollView Grid.Row="0" Margin="0" >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -58,33 +62,44 @@
                         </Grid.RowDefinitions>
 
                         <!-- Recommend Actions & Settings -->
-                        <Grid Grid.Row="0">
+                        <Grid Grid.Row="0" HorizontalAlignment="Stretch"  Padding="10">
+
                             <!-- Recommend Actions -->
-                            <StackPanel Orientation="Horizontal" Spacing="1" >
-                                <Button ToolTipService.ToolTip="Basic" CornerRadius="6,0,0,6">
-                                    <FontIcon Glyph="&#xEC48;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                            <AutoSuggestBox PlaceholderText="{x:Bind ViewModel.PlaceHolderSuggestions, Mode=TwoWay}" QueryIcon="Zoom" Margin="0,0,200,0" />
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="2">
+
+                                <!-- Apply only Minimal Settings -->
+                                <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Apply only Recommended Settings">
+                                    <FontIcon Glyph="&#xE9CA;" />
                                 </Button>
-                                <Button ToolTipService.ToolTip="Recommended Tweaks" CornerRadius="2">
-                                    <FontIcon Glyph="&#xEC49;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+
+                                <!-- Apply only Recommended Settings -->
+                                <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Apply only Recommended Settings">
+                                    <FontIcon Glyph="&#xE82F;" />
                                 </Button>
-                                <Button ToolTipService.ToolTip="Extreme performance" CornerRadius="0,6,6,0">
-                                    <FontIcon Glyph="&#xEC4A;" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+
+                                <!-- Apply All Settings -->
+                                <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Select All">
+                                    <FontIcon Glyph="&#xEADF;" />
+                                </Button>
+
+                                <!-- Settings -->
+                                <Button HorizontalAlignment="Right" Command="{x:Bind ViewModel.GoToSettingsViewModelCommand}">
+                                    <SymbolIcon Symbol="Setting" />
                                 </Button>
                             </StackPanel>
-
-                            <!-- Settings -->
-                            <Button HorizontalAlignment="Right" Command="{x:Bind ViewModel.GoToSettingsViewModelCommand}">
-                                <SymbolIcon Symbol="Setting" />
-                            </Button>
                         </Grid>
                     </Grid>
                 </ScrollView>
             </Grid>
 
             <!-- ScrollView for ListViews -->
-            <ScrollView Grid.Row="1"  Margin="0,0,0,30">
+            <ScrollView Grid.Row="2"  Margin="0,0,0,30" >
+
                 <!-- StackPanel for ListViews -->
                 <StackPanel>
+
                     <!-- Gamemode ListView -->
                     <ListView IsItemClickEnabled="False" Grid.Row="1" SelectionMode="None" ItemsSource="{x:Bind ViewModel.GamemodeTweaks, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}" Margin="0,10,0,0" />
 
@@ -141,16 +156,78 @@
             </Grid.ColumnDefinitions>
 
             <!-- Left Side - PersonPicture -->
-            <PersonPicture PreferSmallImage="True" Width="50" HorizontalAlignment="Left" />
+            <PersonPicture PreferSmallImage="True" Width="50" HorizontalAlignment="Left" ProfilePicture="{x:Bind ViewModel.AccountPicture, Mode=OneWay}" />
 
             <!-- Left Side Centered - User Info -->
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Column="1" Margin="10,0,0,0">
-                <TextBlock Text="SkullDeath" FontWeight="SemiBold" IsColorFontEnabled="True" Foreground="CornflowerBlue" />
-                <TextBlock Text="CurrentEmail@gmail.com" Style="{StaticResource CaptionTextBlockStyle}" FontSize="12" />
+                <TextBlock Text="{x:Bind ViewModel.Username, Mode=OneWay}" FontWeight="SemiBold" IsColorFontEnabled="True" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}" />
+                <TextBlock Text="{x:Bind ViewModel.Email, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" FontSize="12" />
             </StackPanel>
 
             <!-- Right Side - Run Scripts Button -->
-            <Button Grid.Column="2" HorizontalAlignment="Right" Content="Run Scripts" FontWeight="SemiBold" Style="{StaticResource AccentButtonStyle}" />
+            <Button Grid.Column="2" HorizontalAlignment="Right" FontWeight="SemiBold" Width="204" x:Name="ExecuteCommandButton">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Text="Execute Selected Tweaks" />
+                    <FontIcon Glyph="&#xE9D9;" />
+                </StackPanel>
+                <!--<Button.Template>
+                    <ControlTemplate TargetType="Button">
+                    <Grid x:Name="mGrid" CornerRadius="4" BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="1" Padding="10" Background="{ThemeResource CardBackgroundFillColorDefault}">
+
+                    <ContentPresenter x:Name="NormalContent" Content="{TemplateBinding Content}" />
+
+                    <ProgressRing x:Name="ProgressRing" Visibility="Collapsed" />
+
+                    <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                    <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NormalContent" Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible" />
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ProgressRing" Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Collapsed" />
+                    </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Loading">
+                    <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ProgressRing" Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible" />
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NormalContent" Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Collapsed" />
+                    </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver">
+                    <Storyboard>
+                    <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="mGrid"
+                    Storyboard.TargetProperty="Background">
+                    <DiscreteObjectKeyFrame
+                    KeyTime="0:0:0"
+                    Value="{ThemeResource SubtleFillColorSecondary}" />
+                    </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                    <Storyboard>
+                    <ObjectAnimationUsingKeyFrames
+                    Storyboard.TargetName="mGrid"
+                    Storyboard.TargetProperty="Background">
+                    <DiscreteObjectKeyFrame
+                    KeyTime="0:0:0"
+                    Value="{ThemeResource SubtleFillColorTertiary}" />
+                    </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                    </VisualState>
+                    </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                    </ControlTemplate>
+                    </Button.Template>-->
+            </Button>
         </Grid>
     </Grid>
 </Page>

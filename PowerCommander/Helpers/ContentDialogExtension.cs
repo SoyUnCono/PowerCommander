@@ -14,7 +14,7 @@ public static class ContentDialogExtension
     /// Initializes the ContentDialogExtension with the specified XamlRoot.
     /// </summary>
     /// <param name="xamlRoot">The XamlRoot to be used for displaying ContentDialogs.</param>
-    public static void Initialize(XamlRoot? xamlRoot) =>
+    public static void Initialize(XamlRoot xamlRoot) =>
         mXamlRoot = xamlRoot;
 
     /// <summary>
@@ -25,7 +25,7 @@ public static class ContentDialogExtension
     /// <param name="mCloseButtonText">The text for the close button of the ContentDialog.</param>
     /// <param name="mPrimaryButtonText">The text for the primary button of the ContentDialog (nullable).</param>
     /// <returns>A task representing the asynchronous operation and returning the result of the ContentDialog.</returns>
-    public static async Task<ContentDialogResult> ShowDialogAsync(string mTitle, string mDescription, string mCloseButtonText, string mPrimaryButtonText)
+    public static async Task<ContentDialogResult> ShowDialogAsync(string? mTitle, string? mDescription, string? mCloseButtonText, string? mPrimaryButtonText)
     {
         // Create a ContentDialog and populate it with the provided data
         ContentDialog mContentDialog = new() {

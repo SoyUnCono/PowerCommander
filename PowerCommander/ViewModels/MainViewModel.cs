@@ -1,9 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Newtonsoft.Json;
-using PowerCommander.Contracts.Services;
 using PowerCommander.Helpers;
 using PowerCommander.Models;
+using Windows.System;
+using WinUICommunity;
 namespace PowerCommander.ViewModels;
 
 public partial class MainViewModel : ObservableRecipient
@@ -18,7 +21,7 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Service used for navigation purposes.
     /// </summary>
-    private readonly INavigationService _navigationService;
+    private readonly Contracts.Services.INavigationService _navigationService;
 
     #endregion
 
@@ -40,7 +43,7 @@ public partial class MainViewModel : ObservableRecipient
     [ObservableProperty] private List<SettingsItem>? _gamemodeTweaks;
 
     /// <summary>
-    /// Displayed other tweaks on the view.
+    /// Displayed Network tweaks on the view.
     /// </summary>
     [ObservableProperty] private List<SettingsItem>? _network;
 
@@ -49,14 +52,40 @@ public partial class MainViewModel : ObservableRecipient
     /// </summary>
     [ObservableProperty] private List<SettingsItem>? _otherTweak;
 
+    /// <summary>
+    /// Custom text displayed to the user along with the current enumerated tweaks.
+    /// </summary>
+    [ObservableProperty] private string? _placeHolderSuggestions;
+
+    /// <summary>
+    /// The current count of tweaks in the JSON file.
+    /// </summary>
+    [ObservableProperty] private int _totalTweaks;
+
+    /// <summary>
+    /// Represents the current profile picture associated with the local user account.
+    /// </summary>
+    [ObservableProperty] private ImageSource? _accountPicture;
+
+    /// <summary>
+    /// Gets or sets the email associated with the user's Microsoft account.
+    /// </summary>
+    [ObservableProperty] private string? _email;
+
+    /// <summary>
+    /// Gets or sets the username or display name associated with the user's Microsoft account.
+    /// </summary>
+    [ObservableProperty] private string? _username;
+
     #endregion
 
     /// <summary>
     /// Main constructor for the MainViewModel class.
     /// </summary>
-    public MainViewModel(INavigationService navigationService) =>
+    public MainViewModel(Contracts.Services.INavigationService navigationService) =>
         // Initialize navigationService
         _navigationService = navigationService;
+
 
     #region private members
 
@@ -86,12 +115,46 @@ public partial class MainViewModel : ObservableRecipient
             }
             else {
                 // Handle the case where the target group or its 'Items' is null
-                await ContentDialogExtension.ShowDialogAsync(mTitle: "Oh no", mDescription: $"SettingsGroup with 'GroupName' '{targetGroupName}' not found or does not have 'Items'.", mCloseButtonText: "Ok", mPrimaryButtonText: "Retry");
+                await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"SettingsGroup with 'GroupName' '{targetGroupName}' not found or does not have 'Items'.", mCloseButtonText: "Ok", mPrimaryButtonText: "Retry");
             }
         }
         catch (Exception ex) {
             // Handle any exceptions that might occur during the process
-            await ContentDialogExtension.ShowDialogAsync(mTitle: "Oh no", mDescription: $"A problem has ocurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
+            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has ocurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
+        }
+    }
+
+    /// <summary>
+    /// Counts the total number of 'Items' across all SettingsGroups in the JSON file.
+    /// </summary>
+    /// <returns>The total count of 'Items' in all groups.</returns>
+    private async Task<int> CountTotalItems(int mTotalCount)
+    {
+        try {
+            // Read the content from the JSON file
+            var jsonContent = File.ReadAllText(path);
+
+            // Deserialize the JSON into a list of SettingsGroups
+            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(value: jsonContent);
+
+            // Iterate through each SettingsGroup
+            foreach (var group in settingsGroups!) {
+                // Check if the current group has 'Items'
+                if (group?.Items != null) {
+                    // Increment the total count by the number of 'Items' in the current group
+                    mTotalCount += group.Items.Count;
+                }
+            }
+
+            // Return the total count of 'Items' in all groups
+            return mTotalCount;
+        }
+        catch (Exception ex) {
+            // Handle any exceptions that might occur during the process
+            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to Count the items in the JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
+
+            // Return 0 if there was an issue
+            return 0;
         }
     }
 
@@ -121,6 +184,59 @@ public partial class MainViewModel : ObservableRecipient
         await FetchJSONData("Gamemode", GamemodeTweaks);
         await FetchJSONData("OtherTweaks", OtherTweak);
         await FetchJSONData("Network", Network);
+
+        // Execute the command to retrieve the user's profile picture asynchronously.
+        GetUserProfileInfoCommand.Execute(this);
+
+        // Update the PlaceHolderSuggestions property with a message indicating the search for the total number of tweaks.
+        PlaceHolderSuggestions = $"Search for {await CountTotalItems(TotalTweaks)} Tweaks...";
+    }
+
+    /// <summary>
+    /// Command to retrieve the user's profile information including picture, email, and account name.
+    /// </summary>
+    [RelayCommand]
+    private async Task GetUserProfileInfo()
+    {
+        try {
+            // Find the local user and retrieve their profile information.
+            var user = (await User.FindAllAsync(UserType.LocalUser)).FirstOrDefault();
+            if (user != null) {
+                // Get the user's picture
+                var userPicture = await user.GetPictureAsync(UserPictureSize.Size64x64);
+
+                // Add the first name to the Username string
+                Username = (await user.GetPropertyAsync(KnownUserProperties.DisplayName))?.ToString()?.ToUpper();
+
+                // If Username is Empty...
+                if (string.IsNullOrEmpty(Username))
+                    // Use the local machine name.
+                    Username = Environment.UserName;
+
+                // Add the last name to the Email string
+                Email = (await user.GetPropertyAsync(KnownUserProperties.AccountName))?.ToString();
+
+                // If Email is null...
+                if (string.IsNullOrEmpty(Email))
+                    // Set it to "Local Account" to indicate that the user's email is not available.
+                    Email = "Local Account";
+
+                // If a profile picture is available, set it as the system picture.
+                if (userPicture != null) {
+                    // Open the picture stream and create a BitmapImage from it.
+                    using var stream = await userPicture.OpenReadAsync();
+                    var bitmapImage = new BitmapImage();
+                    await bitmapImage.SetSourceAsync(stream);
+
+                    // Set the system picture to the retrieved BitmapImage.
+                    AccountPicture = bitmapImage;
+                }
+            }
+        }
+        catch (Exception ex) {
+            // Handle any exceptions that might occur during the process
+            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to retrieve user profile information: {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
+        }
     }
 
 

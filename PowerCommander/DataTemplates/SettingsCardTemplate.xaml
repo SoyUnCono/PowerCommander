@@ -16,8 +16,25 @@
                 <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
             </winui:SettingsCard.HeaderIcon>
             <winui:SettingsCard.Description>
-                <TextBlock Text="{Binding Description}" ToolTipService.ToolTip="{Binding Description}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
+                <TextBlock Text="{Binding Description}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
             </winui:SettingsCard.Description>
+            <ToolTipService.ToolTip>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Ellipse Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5" Fill="{ThemeResource AccentAAFillColorDefaultBrush}" Width="12" Height="12" />
+
+                    <StackPanel Grid.Row="0" BorderBrush="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderThickness="0,0,0,1" Orientation="Horizontal" Spacing="20" Margin="0,0,0,10" Padding="10">
+                        <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+                        <TextBlock Text="{Binding Title}" FontSize="15"  FontWeight="SemiBold" MaxWidth="200" TextWrapping="WrapWholeWords" />
+                    </StackPanel>
+
+                    <TextBlock Text="{x:Bind Description}" Grid.Row="1" TextWrapping="WrapWholeWords" Style="{ThemeResource CaptionTextBlockStyle}" />
+                </Grid>
+            </ToolTipService.ToolTip>
             <ToggleSwitch IsOn="{Binding ToggleSwitchState}" OffContent="" OnContent="" />
         </winui:SettingsCard>
     </DataTemplate>

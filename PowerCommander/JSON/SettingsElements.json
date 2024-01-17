@@ -188,7 +188,7 @@
                 "UniqueID": "GamemodeTweak",
                 "Notification_IsOpen": true,
                 "Notification_Title": "Note:",
-                "Notification_Message": "Changes to these settings will only take effect when PowerCommander is open and Game Mode is active. Do not make any alterations if you are unsure of what you are modifying.",
+                "Notification_Message": "Changes to these settings will only take effect when PowerCommander is open and Game Mode is active. Do not make any alterations if you are unsure of what you are modifying. The window will automatically hide and show based on the detection of whether you are playing a game or not, eliminating the need to manually close it.",
                 "IsExpanded": false,
                 "ExpanderSwitchVisibility": true,
                 "ExpanderSwitchState": false,
@@ -321,7 +321,7 @@
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
                         "IsEnabled": true,
-                        "ToggleSwitchState": false,
+                        "ToggleSwitchState": true,
                         "UniqueID": "Preemption"
                     },
                     {
@@ -332,7 +332,7 @@
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
                         "IsEnabled": true,
-                        "ToggleSwitchState": false,
+                        "ToggleSwitchState": true,
                         "UniqueID": "PCIeLinkSpeed"
                     }
                 ]

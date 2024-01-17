@@ -1,6 +1,8 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using PowerCommander.Helpers;
 using PowerCommander.ViewModels;
+using Windows.UI.Core;
 
 namespace PowerCommander.Views;
 
@@ -32,8 +34,7 @@ public sealed partial class MainPage : Page
         App.MainWindow.SetTitleBar(AppTitleBar);
 
         // Start the asynchronous execution of the ViewModel's initialization command for the page.
-        Task.Run(() =>
-             ViewModel.InitializeViewModelAsyncCommand.Execute(this));
+        ViewModel.InitializeViewModelAsyncCommand.Execute(this);
     }
 
     /// <summary>
@@ -43,7 +44,6 @@ public sealed partial class MainPage : Page
     /// <param name="e">The event arguments.</param>
     private void RootGrid_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) =>
         // Initialize the ContentDialogExtension with the XamlRoot of the RootGrid.
-        ContentDialogExtension.Initialize(RootGrid.XamlRoot);
-
+        ContentDialogExtension.Initialize(this.RootGrid.XamlRoot);
 
 }

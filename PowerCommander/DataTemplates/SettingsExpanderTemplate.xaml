@@ -15,7 +15,7 @@
     <!-- DataTemplate for SettingsExpander -->
     <DataTemplate x:Key="SettingsExpanderTemplate" x:DataType="models:SettingsItem">
         <!-- SettingsExpander Template -->
-        <winui:SettingsExpander Header="{Binding Title}"  IsExpanded="{x:Bind IsExpanded}" IsEnabled="{x:Bind IsEnable}">
+        <winui:SettingsExpander Header="{Binding Title}" IsExpanded="{x:Bind IsExpanded}" Margin="0,0,0,1" BorderThickness="1" BorderBrush="{ThemeResource PowerCommander_CardStroke}" IsEnabled="{x:Bind IsEnable}" Background="{ThemeResource PowerCommander_Background}">
             <ToolTipService.ToolTip>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -52,7 +52,7 @@
                 <ItemsControl ItemsSource="{Binding SettingsExpanderItem}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <winui:SettingsCard CornerRadius="0" BorderThickness="0,1,0,0" Padding="60,20,20,20">
+                            <winui:SettingsCard CornerRadius="0" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource PowerCommander_CardStroke}" Padding="60,20,20,20" Background="{ThemeResource PowerCommander_Background}">
 
                                 <winui:SettingsCard.HeaderIcon>
                                     <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -60,19 +60,13 @@
                                 <winui:SettingsCard.Description>
                                     <TextBlock Text="{Binding Description}" MaxLines="1" Style="{StaticResource CaptionTextBlockStyle}" />
                                 </winui:SettingsCard.Description>
-                                <ToolTipService.ToolTip>
-                                    <Grid>
-
-                                        <TextBlock Text="{Binding Description}" Grid.Row="1" TextWrapping="WrapWholeWords" Style="{ThemeResource CaptionTextBlockStyle}"  Margin="10" />
-                                    </Grid>
-                                </ToolTipService.ToolTip>
-                                <CheckBox HorizontalAlignment="Right" IsChecked="{Binding ToggleSwitchState, Mode=TwoWay}" />
+                                <CheckBox HorizontalAlignment="Right" IsChecked="{Binding ToggleSwitchState, Mode=TwoWay}" Tag="{Binding UniqueID, Mode=OneWay}" />
                             </winui:SettingsCard>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </winui:SettingsExpander.Items>
-            <ToggleSwitch OffContent="" OnContent="" Visibility="{Binding ExpanderSwitchVisibility, Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{Binding ExpanderSwitchState}" />
+            <ToggleSwitch OffContent="" OnContent="" Visibility="{Binding ExpanderSwitchVisibility, Converter={StaticResource BoolToVisibilityConverter}}" IsOn="{Binding ExpanderSwitchState}" Tag="{Binding UniqueID}" />
         </winui:SettingsExpander>
     </DataTemplate>
 

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using PowerCommander.Helpers;
 using PowerCommander.Models;
@@ -16,7 +17,12 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Path to the JSON data file.
     /// </summary>
-    private readonly string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "JSON", "SettingsElements.json");
+    private readonly string mSettingsElements = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "JSON", "SettingsElements.json");
+
+    /// <summary>
+    /// Path to the JSON Registry file.
+    /// </summary>
+    private readonly string mRegistry = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "JSON", "Registry.json");
 
     /// <summary>
     /// Service used for navigation purposes.
@@ -100,7 +106,7 @@ public partial class MainViewModel : ObservableRecipient
         try {
 
             // Read the content from the JSON file
-            var jsonContent = File.ReadAllText(path);
+            var jsonContent = File.ReadAllText(mSettingsElements);
 
             // Deserialize the JSON into a list of SettingsGroups
             var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(value: jsonContent);
@@ -124,6 +130,118 @@ public partial class MainViewModel : ObservableRecipient
         }
     }
 
+
+
+    private async Task SearchForUniqueID(string mRegistryGroupName)
+    {
+        try {
+            // Read the content from the JSON file containing settings items
+            var settingsJsonContent = File.ReadAllText(mSettingsElements);
+
+            // Deserialize the JSON into a list of SettingsGroups
+            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(settingsJsonContent);
+
+            if (settingsGroups != null) {
+                // Find the target UniqueID in the list of settings groups
+                var mTargetUniqueID = settingsGroups
+                    ?.SelectMany(group => group.Items ?? Enumerable.Empty<SettingsItem>())
+                    .FirstOrDefault(item => item.UniqueID == mRegistryGroupName);
+
+                if (mTargetUniqueID != null) {
+                    // Check if there is at least one ToggleSwitch that is enabled
+                    if (mTargetUniqueID.ToggleSwitchState) {
+                        // After finding the UniqueID, apply the specific registry settings
+                        await ApplyRegistrySettingsForUniqueID(mRegistryGroupName);
+                    }
+                }
+                else {
+                    // Handle the case where the target UniqueID is not found
+                    // You might want to display a message or take other appropriate actions
+                }
+            }
+        }
+        catch (Exception ex) {
+            // Handle any exceptions that might occur during the process
+            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
+        }
+    }
+
+
+    /// <summary>
+    /// Applies registry settings based on the information provided in a JSON file for a specific UniqueID.
+    /// </summary>
+    /// <param name="mRegistryGroupName">UniqueID used to filter registry settings.</param>
+    private async Task ApplyRegistrySettingsForUniqueID(string mRegistryGroupName)
+    {
+        try {
+            // Read the content from the JSON file of the registry
+            var registryJsonContent = File.ReadAllText(mRegistry);
+
+            // Deserialize the JSON into a list of RegistrySettings
+            var registrySettings = JsonConvert.DeserializeObject<List<RegistrySettings>>(registryJsonContent);
+
+            // Filter the list of RegistrySettings to get only those with RegistryGroupName equal to the UniqueID
+            var filteredRegistrySettings = registrySettings?
+                .Where(registrySetting => registrySetting.RegistryGroupName == mRegistryGroupName)
+                .ToList();
+
+            if (filteredRegistrySettings != null) {
+                // Iterate over the filtered RegistrySettings
+                foreach (var registrySetting in filteredRegistrySettings) {
+                    // Iterate over the Items in each RegistrySetting
+                    foreach (var item in registrySetting.Items!) {
+                        try {
+                            // Base registry key variable
+                            RegistryKey? mBaseKey = Registry.LocalMachine;
+
+                            // Determine the base of the registry based on the path specified in the JSON
+                            switch (item.Path) {
+                                case string path when path.StartsWith("HKEY_LOCAL_MACHINE"):
+                                    mBaseKey = Registry.LocalMachine;
+                                    break;
+                                case string path when path.StartsWith("USER_CURRENT"):
+                                    mBaseKey = Registry.CurrentUser;
+                                    break;
+                                default:
+                                    // Default case
+                                    break;
+                            }
+
+                            // Get the rest of the path after the root
+                            string subKeyPath = item.Path!.Substring(item.Path.IndexOf("\\") + 1);
+
+                            // Open the registry key
+                            var registryKey = mBaseKey!.OpenSubKey(subKeyPath, true);
+
+                            if (registryKey != null) {
+                                // Check if the key already exists
+                                var existingValue = registryKey.GetValue(item.Name);
+
+                                if (existingValue != null) {
+                                    // If the key exists, delete it before adding it again
+                                    registryKey.DeleteValue(item.Name!);
+                                }
+
+                                // Create the new key with the specified value
+                                if (item.Type == "DWORD") {
+                                    registryKey.SetValue(item.Name, int.Parse(item?.Keyvalue?.EnableValue!), RegistryValueKind.DWord);
+                                }
+                            }
+                        }
+                        catch (Exception ex) {
+                            // Handle any exceptions that might occur during the process
+                            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to apply settings to the registry {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+            // Handle any exceptions that might occur during the process
+            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
+        }
+    }
+
     /// <summary>
     /// Counts the total number of 'Items' across all SettingsGroups in the JSON file.
     /// </summary>
@@ -132,7 +250,7 @@ public partial class MainViewModel : ObservableRecipient
     {
         try {
             // Read the content from the JSON file
-            var jsonContent = File.ReadAllText(path);
+            var jsonContent = File.ReadAllText(mSettingsElements);
 
             // Deserialize the JSON into a list of SettingsGroups
             var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(value: jsonContent);
@@ -192,6 +310,22 @@ public partial class MainViewModel : ObservableRecipient
         PlaceHolderSuggestions = $"Search for {await CountTotalItems(TotalTweaks)} Tweaks...";
     }
 
+    [RelayCommand]
+    public async Task ExecuteRegistryTask()
+    {
+        var mRegistryPath = File.ReadAllText(mRegistry);
+
+        // Deserialize the JSON into a list of SettingsGroups
+        var mRegistryData = JsonConvert.DeserializeObject<List<RegistrySettings>>(value: mRegistryPath);
+
+        // For every Regedit found in registryData...
+        foreach (var regedit in mRegistryData!) {
+
+            // Add Search and Add for the unique ID
+            await SearchForUniqueID(regedit.RegistryGroupName!);
+        }
+    }
+
     /// <summary>
     /// Command to retrieve the user's profile information including picture, email, and account name.
     /// </summary>
@@ -202,6 +336,7 @@ public partial class MainViewModel : ObservableRecipient
             // Find the local user and retrieve their profile information.
             var user = (await User.FindAllAsync(UserType.LocalUser)).FirstOrDefault();
             if (user != null) {
+
                 // Get the user's picture
                 var userPicture = await user.GetPictureAsync(UserPictureSize.Size64x64);
 

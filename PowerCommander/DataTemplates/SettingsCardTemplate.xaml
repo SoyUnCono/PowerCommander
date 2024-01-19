@@ -11,12 +11,12 @@
     <!-- DataTemplate for SettingsItem -->
     <DataTemplate x:DataType="models:SettingsItem" x:Key="SettingsCardTemplate">
         <!-- SettingsCard Template -->
-        <winui:SettingsCard Header="{Binding Title}" IsActionIconVisible="{Binding HasActionIcon}" IsEnabled="{Binding IsEnable}" IsClickEnabled="{Binding IsClickEnable}">
+        <winui:SettingsCard Header="{x:Bind Title, Mode=OneWay}"  BorderBrush="{ThemeResource PowerCommander_CardStroke}" Margin="0,0,0,1" IsActionIconVisible="{x:Bind HasActionIcon, Mode=OneWay}" IsEnabled="{x:Bind IsEnable, Mode=TwoWay}" IsClickEnabled="{x:Bind IsClickEnabled, Mode=TwoWay}" Background="{ThemeResource PowerCommander_Background}">
             <winui:SettingsCard.HeaderIcon>
                 <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
             </winui:SettingsCard.HeaderIcon>
             <winui:SettingsCard.Description>
-                <TextBlock Text="{Binding Description}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
+                <TextBlock Text="{x:Bind Description, Mode=OneWay}" MaxLines="2" Style="{StaticResource CaptionTextBlockStyle}" />
             </winui:SettingsCard.Description>
             <ToolTipService.ToolTip>
                 <Grid>
@@ -25,7 +25,7 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Ellipse Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5" Fill="{ThemeResource AccentAAFillColorDefaultBrush}" Width="12" Height="12" />
+                    <Ellipse Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5" Fill="{ThemeResource PowerCommander_BlueAccentColor}" Width="12" Height="12" />
 
                     <StackPanel Grid.Row="0" BorderBrush="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderThickness="0,0,0,1" Orientation="Horizontal" Spacing="20" Margin="0,0,0,10" Padding="10">
                         <FontIcon Glyph="{Binding Icon}" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
@@ -35,7 +35,7 @@
                     <TextBlock Text="{x:Bind Description}" Grid.Row="1" TextWrapping="WrapWholeWords" Style="{ThemeResource CaptionTextBlockStyle}" />
                 </Grid>
             </ToolTipService.ToolTip>
-            <ToggleSwitch IsOn="{Binding ToggleSwitchState}" OffContent="" OnContent="" />
+            <ToggleSwitch x:Name="mToggleSwitch" IsOn="{Binding ToggleSwitchState}" OffContent="" Toggled="ToggleSwitch_Toggled" OnContent="" Tag="{x:Bind UniqueID, Mode=OneWay}" />
         </winui:SettingsCard>
     </DataTemplate>
 

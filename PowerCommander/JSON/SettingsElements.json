@@ -10,7 +10,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uE716",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "UAC"
             },
@@ -21,7 +21,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uE7B3",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "Telemetry"
             },
@@ -32,7 +32,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uEDE4",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": false,
                 "UniqueID": "SearchTracker"
             },
@@ -43,7 +43,7 @@
                 "Icon": null,
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "UniqueID": "AdditionalSecuritySettings",
                 "IsExpanded": true,
                 "ExpanderSwitchVisibility": false,
@@ -55,8 +55,8 @@
                         "Description": "Delete Firewall rules",
                         "Icon": "\uEE77",
                         "HasActionIcon": false,
-                        "IsClickEnabled": true,
-                        "IsEnabled": true,
+                        "IsClickEnabled": false,
+                        "IsEnable": true,
                         "ToggleSwitchState": false,
                         "UniqueID": "FirewallSettings"
                     },
@@ -67,7 +67,7 @@
                         "Icon": "\uEA18",
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
-                        "IsEnabled": true,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "AntivirusConfiguration"
                     }
@@ -80,7 +80,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uE876",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": false,
                 "UniqueID": "CoreIsolation"
             }
@@ -97,7 +97,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uE8BE",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "Hibernation"
             },
@@ -108,7 +108,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uE945",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": false,
                 "UniqueID": "PowerThrottling"
             },
@@ -119,7 +119,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uE839",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "NetworkThrottling"
             },
@@ -130,7 +130,7 @@
                 "Icon": "\uE781",
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "UniqueID": "PowerPlanOptions",
                 "IsExpanded": true,
                 "ExpanderSwitchVisibility": false,
@@ -142,8 +142,8 @@
                         "Description": "Install CommanderPowerPlan with IDLE",
                         "Icon": null,
                         "HasActionIcon": false,
-                        "IsClickEnabled": true,
-                        "IsEnabled": true,
+                        "IsClickEnabled": false,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "PowerPlanIDLE"
                     },
@@ -154,7 +154,7 @@
                         "Icon": null,
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
-                        "IsEnabled": true,
+                        "IsEnable": true,
                         "ToggleSwitchState": false,
                         "UniqueID": "PowerPlanWithoutIDLE"
                     }
@@ -167,7 +167,7 @@
                 "HasActionIcon": false,
                 "Icon": "\uEC46",
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "Sleep"
             }
@@ -184,7 +184,7 @@
                 "Icon": "\uE7FC",
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "UniqueID": "GamemodeTweak",
                 "Notification_IsOpen": true,
                 "Notification_Title": "Note:",
@@ -199,8 +199,8 @@
                         "Description": "AutoDetect when playing",
                         "Icon": null,
                         "HasActionIcon": false,
-                        "IsClickEnabled": true,
-                        "IsEnabled": true,
+                        "IsClickEnabled": false,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "AutoGame"
                     }
@@ -218,8 +218,8 @@
                 "Description": "While this may avoid potential issues from incompatible or problematic driver updates, it also means users need to manually manage driver updates, potentially missing out on enhancements and optimizations introduced by the latest driver versions.",
                 "Icon": "\uE835",
                 "HasActionIcon": false,
-                "IsClickEnabled": true,
-                "IsEnabled": true,
+                "IsClickEnabled": false,
+                "IsEnable": true,
                 "ToggleSwitchState": false,
                 "UniqueID": "DriverSearching"
             },
@@ -229,8 +229,19 @@
                 "Description": "By deactivating this feature, users eliminate automatic suggestions for actions related to clipboard content, providing a more traditional clipboard experience.",
                 "Icon": "\uE897",
                 "HasActionIcon": false,
-                "IsClickEnabled": true,
-                "IsEnabled": true,
+                "IsClickEnabled": false,
+                "IsEnable": true,
+                "ToggleSwitchState": false,
+                "UniqueID": "SuggestedActions"
+            },
+            {
+                "Type": "SettingsCard",
+                "Title": "Fix Mouse and Keyboard Input",
+                "Description": "This configuration script alters registry settings associated with the mouse and keyboard classes in the Windows operating system this can potentially influencing the size of the data queue for the mouse and keyboard input",
+                "Icon": "\uE7C9",
+                "HasActionIcon": false,
+                "IsClickEnabled": false,
+                "IsEnable": true,
                 "ToggleSwitchState": false,
                 "UniqueID": "SuggestedActions"
             },
@@ -240,8 +251,8 @@
                 "Description": "This means that all apps will be prevented from running in the background, potentially impacting their ability to provide real-time notifications or perform background tasks.",
                 "Icon": "\uE8B3",
                 "HasActionIcon": false,
-                "IsClickEnabled": true,
-                "IsEnabled": true,
+                "IsClickEnabled": false,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "BackgroundApps"
             },
@@ -251,8 +262,8 @@
                 "Description": "FSE or FullScreenExclusive its a graphics presentation mode where a software application has complete and exclusive control over the user's screen. In this mode, the application can occupy the entire screen without interruption from other operating system elements, such as taskbars or windows from other applications.",
                 "Icon": "\uE7B5",
                 "HasActionIcon": false,
-                "IsClickEnabled": true,
-                "IsEnabled": true,
+                "IsClickEnabled": false,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "FullScreenExclusive"
             },
@@ -263,7 +274,7 @@
                 "Icon": "\uF211",
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "UniqueID": "NvidiaOptions",
                 "IsExpanded": true,
                 "ExpanderSwitchVisibility": false,
@@ -275,8 +286,8 @@
                         "Description": "Forcing P0 State may lead to increased performance, but users should exercise caution as it can also result in higher power consumption and heat generation.",
                         "Icon": null,
                         "HasActionIcon": false,
-                        "IsClickEnabled": true,
-                        "IsEnabled": true,
+                        "IsClickEnabled": false,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "P0State"
                     },
@@ -287,7 +298,7 @@
                         "Icon": null,
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
-                        "IsEnabled": true,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "HDCP"
                     },
@@ -298,7 +309,7 @@
                         "Icon": null,
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
-                        "IsEnabled": true,
+                        "IsEnable": true,
                         "ToggleSwitchState": false,
                         "UniqueID": "NvidiaSharpening"
                     },
@@ -309,7 +320,7 @@
                         "Icon": null,
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
-                        "IsEnabled": true,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "NvidiaTrayIcon"
                     },
@@ -320,7 +331,7 @@
                         "Icon": null,
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
-                        "IsEnabled": true,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "Preemption"
                     },
@@ -331,7 +342,7 @@
                         "Icon": null,
                         "HasActionIcon": false,
                         "IsClickEnabled": false,
-                        "IsEnabled": true,
+                        "IsEnable": true,
                         "ToggleSwitchState": true,
                         "UniqueID": "PCIeLinkSpeed"
                     }
@@ -344,7 +355,7 @@
                 "Icon": "\uE9F5",
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "WindowsPrioritySeparation"
             }
@@ -361,7 +372,7 @@
                 "Icon": "\uF193",
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": false,
                 "UniqueID": "QualityofService"
             },
@@ -372,7 +383,7 @@
                 "Icon": "\uEDA3",
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "LanmanServiceSettings"
             },
@@ -383,7 +394,7 @@
                 "Icon": "\uE968",
                 "HasActionIcon": false,
                 "IsClickEnabled": false,
-                "IsEnabled": true,
+                "IsEnable": true,
                 "ToggleSwitchState": true,
                 "UniqueID": "NetworkService"
             }

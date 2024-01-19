@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    >
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="PowerCommander_Background"
+                             Color="#111B21" />
+            <SolidColorBrush x:Key="PowerCommander_Components"
+                             Color="#0B141A" />
+            <SolidColorBrush x:Key="PowerCommander_CardStroke"
+                             Color="#060C10" />
+            <SolidColorBrush x:Key="PowerCommander_GreenAccentColor"
+                             Color="#00A884" />
+            <SolidColorBrush x:Key='PowerCommander_BlueAccentColor'
+                             Color='#215A9D' />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="PowerCommander_Background"
+                             Color="#EFFFFD" />
+            <SolidColorBrush x:Key="PowerCommander_Components"
+                             Color="#fff" />
+            <SolidColorBrush x:Key="PowerCommander_CardStroke"
+                             Color="#85F4FF" />
+            <SolidColorBrush x:Key="PowerCommander_GreenAccentColor"
+                             Color="#00A884" />
+            <SolidColorBrush x:Key='PowerCommander_BlueAccentColor'
+                             Color='#215A9D' />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>

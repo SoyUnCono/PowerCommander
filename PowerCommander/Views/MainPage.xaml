@@ -33,9 +33,9 @@
         </Grid.RowDefinitions>
 
         <!-- TitleBar -->
-        <Grid x:Name="AppTitleBar" Canvas.ZIndex="1" Grid.Row="0" Margin="10,0,0,0" >
+        <Grid x:Name="AppTitleBar" Canvas.ZIndex="1" Grid.Row="0" Background="{ThemeResource PowerCommander_Background}">
             <!-- TitleBar Content -->
-            <Image Source="/Assets/WindowIcon.ico" HorizontalAlignment="Left" Width="24" Height="24" />
+            <Image Source="/Assets/WindowIcon.ico" HorizontalAlignment="Left" Margin="10,0,0,0" Width="24" Height="24" />
             <TextBlock Text="PowerCommander" FontWeight="SemiBold" Margin="38,0,0,0" VerticalAlignment="Center" TextWrapping="NoWrap" Style="{StaticResource CaptionTextBlockStyle}" />
         </Grid>
 
@@ -43,7 +43,7 @@
         <StackPanel winui:Growl.GrowlParent="True" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="20" Grid.RowSpan="3" Canvas.ZIndex="20" />
 
         <!-- Main Content Grid -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="{ThemeResource PowerCommander_Background}">
             <!-- Grid Rows for Main Content -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -54,7 +54,7 @@
             <Grid Margin="15,10,15,0" Padding="10" VerticalAlignment="Top" Grid.Row="0" >
 
                 <!-- Recommend Actions & Settings -->
-                <ScrollView Grid.Row="0" Margin="0" >
+                <ScrollView Grid.Row="0" Margin="0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -95,10 +95,10 @@
             </Grid>
 
             <!-- ScrollView for ListViews -->
-            <ScrollView Grid.Row="2"  Margin="0,0,0,30" >
+            <ScrollView Grid.Row="2" CornerRadius="8,8,0,0" BorderThickness="1" BorderBrush="{ThemeResource PowerCommander_CardStroke}" VerticalScrollBarVisibility="Hidden" VerticalScrollChainMode="Always" Background="{ThemeResource PowerCommander_Components}">
 
                 <!-- StackPanel for ListViews -->
-                <StackPanel>
+                <StackPanel Padding="5">
 
                     <!-- Gamemode ListView -->
                     <ListView IsItemClickEnabled="False" Grid.Row="1" SelectionMode="None" ItemsSource="{x:Bind ViewModel.GamemodeTweaks, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}" Margin="0,10,0,0" />
@@ -120,13 +120,7 @@
                     <!-- Power ListView -->
                     <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.Power, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
                         <ListView.Header>
-                            <winui:SimpleSettingsGroup Header="Power" Margin="16,0,12,2">
-                                <InfoBar IsOpen="True"
-                                         IsClosable="False"
-                                         Title="Note:"
-                                         Severity="Warning"
-                                         Message="Some of these tweaks are disabled when using a laptop to preserve battery life." />
-                            </winui:SimpleSettingsGroup>
+                            <winui:SimpleSettingsGroup Header="Power" Margin="16,0,12,2" />
                         </ListView.Header>
                     </ListView>
 
@@ -142,7 +136,7 @@
         </Grid>
 
         <!-- Bottom Bar -->
-        <Grid Background="{ThemeResource CardBackgroundFillColorDefault}" Grid.Row="2" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="0,1,0,0">
+        <Grid Grid.Row="2" Padding="20" Background="{ThemeResource PowerCommander_Background}">
             <!-- Grid Columns for Bottom Bar -->
             <Grid.ColumnDefinitions>
                 <!-- Left Side -->
@@ -164,69 +158,9 @@
                 <TextBlock Text="{x:Bind ViewModel.Email, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" FontSize="12" />
             </StackPanel>
 
-            <!-- Right Side - Run Scripts Button -->
-            <Button Grid.Column="2" HorizontalAlignment="Right" FontWeight="SemiBold" Width="204" x:Name="ExecuteCommandButton">
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                    <TextBlock Text="Execute Selected Tweaks" />
-                    <FontIcon Glyph="&#xE9D9;" />
-                </StackPanel>
-                <!--<Button.Template>
-                    <ControlTemplate TargetType="Button">
-                    <Grid x:Name="mGrid" CornerRadius="4" BorderBrush="{ThemeResource CardStrokeColorDefault}" BorderThickness="1" Padding="10" Background="{ThemeResource CardBackgroundFillColorDefault}">
-
-                    <ContentPresenter x:Name="NormalContent" Content="{TemplateBinding Content}" />
-
-                    <ProgressRing x:Name="ProgressRing" Visibility="Collapsed" />
-
-                    <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="CommonStates">
-                    <VisualState x:Name="Normal">
-                    <Storyboard>
-                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NormalContent" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible" />
-                    </ObjectAnimationUsingKeyFrames>
-                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ProgressRing" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Collapsed" />
-                    </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Loading">
-                    <Storyboard>
-                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ProgressRing" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible" />
-                    </ObjectAnimationUsingKeyFrames>
-                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NormalContent" Storyboard.TargetProperty="Visibility">
-                    <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Collapsed" />
-                    </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="PointerOver">
-                    <Storyboard>
-                    <ObjectAnimationUsingKeyFrames
-                    Storyboard.TargetName="mGrid"
-                    Storyboard.TargetProperty="Background">
-                    <DiscreteObjectKeyFrame
-                    KeyTime="0:0:0"
-                    Value="{ThemeResource SubtleFillColorSecondary}" />
-                    </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                    </VisualState>
-                    <VisualState x:Name="Pressed">
-                    <Storyboard>
-                    <ObjectAnimationUsingKeyFrames
-                    Storyboard.TargetName="mGrid"
-                    Storyboard.TargetProperty="Background">
-                    <DiscreteObjectKeyFrame
-                    KeyTime="0:0:0"
-                    Value="{ThemeResource SubtleFillColorTertiary}" />
-                    </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                    </VisualState>
-                    </VisualStateGroup>
-                    </VisualStateManager.VisualStateGroups>
-                    </Grid>
-                    </ControlTemplate>
-                    </Button.Template>-->
+            <!-- Apply only Minimal Settings -->
+            <Button HorizontalAlignment="Right" Command="{x:Bind ViewModel.ExecuteRegistryTaskCommand}" Grid.Column="2" Background="{ThemeResource PowerCommander_Background}" BorderBrush="{ThemeResource PowerCommander_CardStroke}" Width="50" Height="40">
+                <FontIcon Glyph="&#xEDB5;" FontSize="22" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
             </Button>
         </Grid>
     </Grid>

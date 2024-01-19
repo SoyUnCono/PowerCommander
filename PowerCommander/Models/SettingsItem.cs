@@ -41,7 +41,7 @@ public class SettingsItem
     /// <summary>
     /// Gets or sets a value indicating whether clicking is enabled for the settings item.
     /// </summary>
-    public bool IsClickEnable { get; set; }
+    public bool IsClickEnabled { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the settings item is enabled.
@@ -97,24 +97,4 @@ public class SettingsItem
     /// Gets or sets a list of settings items within the expander (if applicable).
     /// </summary>
     public List<SettingsItem>? SettingsExpanderItem { get; set; }
-
-    /// <summary>
-    /// Main Constructor
-    /// </summary>
-    public SettingsItem()
-    {
-
-        // Indicates whether the notification is open or closed
-        Notification_IsOpen = false;
-
-        // Indicates whether the notification can be closed
-        Notification_IsClosable = false;
-
-        // Enables the notification
-        IsEnable = true;
-
-        // Indicates whether the notification has an action icon
-        HasActionIcon = false;
-
-    }
 }

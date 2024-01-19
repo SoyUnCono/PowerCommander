@@ -19,6 +19,7 @@
 	<ItemGroup>
 	  <None Remove="DataTemplates\SettingsCardTemplate.xaml" />
 	  <None Remove="DataTemplates\SettingsExpanderTemplate.xaml" />
+	  <None Remove="Styles\Themes.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -57,9 +58,15 @@
 		<Page Update="DataTemplates\SettingsExpanderTemplate.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</Page>
+		<None Update="JSON\Registry.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="JSON\SettingsElements.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<Page Update="Styles\Themes.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</Page>
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">

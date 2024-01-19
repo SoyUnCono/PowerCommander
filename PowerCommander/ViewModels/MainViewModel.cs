@@ -132,6 +132,11 @@ public partial class MainViewModel : ObservableRecipient
 
 
 
+    /// <summary>
+    /// Searches for a specific UniqueID within the settings groups and applies registry settings if a matching UniqueID is found and the associated ToggleSwitch is enabled.
+    /// </summary>
+    /// <param name="mRegistryGroupName">The UniqueID to search for within the settings groups.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     private async Task SearchForUniqueID(string mRegistryGroupName)
     {
         try {
@@ -154,10 +159,7 @@ public partial class MainViewModel : ObservableRecipient
                         await ApplyRegistrySettingsForUniqueID(mRegistryGroupName);
                     }
                 }
-                else {
-                    // Handle the case where the target UniqueID is not found
-                    // You might want to display a message or take other appropriate actions
-                }
+
             }
         }
         catch (Exception ex) {
@@ -165,6 +167,7 @@ public partial class MainViewModel : ObservableRecipient
             await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
         }
     }
+
 
 
     /// <summary>

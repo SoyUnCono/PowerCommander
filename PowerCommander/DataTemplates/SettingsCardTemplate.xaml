@@ -35,7 +35,7 @@
                     <TextBlock Text="{x:Bind Description}" Grid.Row="1" TextWrapping="WrapWholeWords" Style="{ThemeResource CaptionTextBlockStyle}" />
                 </Grid>
             </ToolTipService.ToolTip>
-            <ToggleSwitch x:Name="mToggleSwitch" IsOn="{Binding ToggleSwitchState}" OffContent="" Toggled="ToggleSwitch_Toggled" OnContent="" Tag="{x:Bind UniqueID, Mode=OneWay}" />
+            <ToggleSwitch x:Name="mToggleSwitch" IsOn="{Binding ToggleSwitchState}" OffContent="" OnContent="" Tag="{x:Bind UniqueID, Mode=OneWay}" />
         </winui:SettingsCard>
     </DataTemplate>
 

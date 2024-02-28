@@ -1,8 +1,9 @@
-﻿using Microsoft.UI.Xaml;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Linq.Expressions;
 
 namespace PowerCommander.Models;
 
-public class SettingsItem
+public partial class SettingsItem : ObservableRecipient
 {
     /// <summary>
     /// Gets or sets the type of the settings item .
@@ -51,7 +52,7 @@ public class SettingsItem
     /// <summary>
     /// Gets or sets a value indicating the toggle switch state of the settings item.
     /// </summary>
-    public bool ToggleSwitchState { get; set; }
+    [ObservableProperty] private bool _toggleSwitchState;
 
     /// <summary>
     /// Gets or sets a unique identifier for the settings item.
@@ -86,15 +87,16 @@ public class SettingsItem
     /// <summary>
     /// Gets or sets the visibility of the expander switch.
     /// </summary>
-    public bool ExpanderSwitchVisibility { get; set; }
+    [ObservableProperty] private bool _expanderSwitchVisibility;
 
     /// <summary>
     /// Gets or sets the state of the expander switch.
     /// </summary>
-    public bool ExpanderSwitchState { get; set; }
+    [ObservableProperty] private bool _expanderSwitchState;
 
     /// <summary>
     /// Gets or sets a list of settings items within the expander (if applicable).
     /// </summary>
-    public List<SettingsItem>? SettingsExpanderItem { get; set; }
+    [ObservableProperty] private List<SettingsItem>? _settingsExpanderItem;
+
 }

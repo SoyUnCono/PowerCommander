@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using PowerCommander.Helpers;
 using PowerCommander.Models;
@@ -15,19 +14,14 @@ public partial class MainViewModel : ObservableRecipient
     #region Private Const properties
 
     /// <summary>
-    /// Path to the JSON data file.
-    /// </summary>
-    private readonly string mSettingsElements = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "JSON", "SettingsElements.json");
-
-    /// <summary>
-    /// Path to the JSON Registry file.
-    /// </summary>
-    private readonly string mRegistry = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "JSON", "Registry.json");
-
-    /// <summary>
     /// Service used for navigation purposes.
     /// </summary>
     private readonly Contracts.Services.INavigationService _navigationService;
+
+    /// <summary>
+    /// Service used for Fetching Data.
+    /// </summary>
+    private readonly Contracts.Services.IFetchJSONDataService _fetchJSONDataService;
 
     #endregion
 
@@ -69,6 +63,11 @@ public partial class MainViewModel : ObservableRecipient
     [ObservableProperty] private int _totalTweaks;
 
     /// <summary>
+    /// Indicates if the current thread is busy or not
+    /// </summary>
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsNotBusy))] private bool _isBusy;
+
+    /// <summary>
     /// Represents the current profile picture associated with the local user account.
     /// </summary>
     [ObservableProperty] private ImageSource? _accountPicture;
@@ -86,196 +85,59 @@ public partial class MainViewModel : ObservableRecipient
     #endregion
 
     /// <summary>
+    /// Set the value to the oposite of IsBusy to update the UI
+    /// </summary>
+    public bool IsNotBusy => !IsBusy;
+
+    /// <summary>
     /// Main constructor for the MainViewModel class.
     /// </summary>
-    public MainViewModel(Contracts.Services.INavigationService navigationService) =>
+    public MainViewModel(Contracts.Services.INavigationService navigationService, Contracts.Services.IFetchJSONDataService fetchJSONDataService)
+    {
         // Initialize navigationService
         _navigationService = navigationService;
+
+        // Initialize fetching service
+        _fetchJSONDataService = fetchJSONDataService;
+    }
 
 
     #region private members
 
     /// <summary>
-    /// Fetches JSON data from the specified file path, deserializes it into a list of SettingsGroups,
-    /// and populates the provided 'targetSettingsList' with the 'Items' from a specific SettingsGroup identified by 'GroupName'.
-    /// </summary>
-    /// <param name="targetGroupName">The 'GroupName' to identify the specific SettingsGroup to iterate.</param>
-    /// <param name="targetSettingsList">The list to populate with 'Items' from the target SettingsGroup.</param>
-    private async Task FetchJSONData(string targetGroupName, List<SettingsItem> targetSettingsList)
-    {
-        try {
-
-            // Read the content from the JSON file
-            var jsonContent = File.ReadAllText(mSettingsElements);
-
-            // Deserialize the JSON into a list of SettingsGroups
-            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(value: jsonContent);
-
-            // Find the SettingsGroup with the specified 'GroupName'
-            var targetGroup = settingsGroups?.FirstOrDefault(group => group?.GroupName == targetGroupName);
-
-            // Check if the target group is found and has 'Items'
-            if (targetGroup != null && targetGroup.Items != null) {
-                // Add the 'Items' from the target group to the provided list
-                targetSettingsList.AddRange(targetGroup.Items);
-            }
-            else {
-                // Handle the case where the target group or its 'Items' is null
-                await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"SettingsGroup with 'GroupName' '{targetGroupName}' not found or does not have 'Items'.", mCloseButtonText: "Ok", mPrimaryButtonText: "Retry");
-            }
-        }
-        catch (Exception ex) {
-            // Handle any exceptions that might occur during the process
-            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has ocurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
-        }
-    }
-
-
-
-    /// <summary>
-    /// Searches for a specific UniqueID within the settings groups and applies registry settings if a matching UniqueID is found and the associated ToggleSwitch is enabled.
-    /// </summary>
-    /// <param name="mRegistryGroupName">The UniqueID to search for within the settings groups.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    private async Task SearchForUniqueID(string mRegistryGroupName)
-    {
-        try {
-            // Read the content from the JSON file containing settings items
-            var settingsJsonContent = File.ReadAllText(mSettingsElements);
-
-            // Deserialize the JSON into a list of SettingsGroups
-            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(settingsJsonContent);
-
-            if (settingsGroups != null) {
-                // Find the target UniqueID in the list of settings groups
-                var mTargetUniqueID = settingsGroups
-                    ?.SelectMany(group => group.Items ?? Enumerable.Empty<SettingsItem>())
-                    .FirstOrDefault(item => item.UniqueID == mRegistryGroupName);
-
-                if (mTargetUniqueID != null) {
-                    // Check if there is at least one ToggleSwitch that is enabled
-                    if (mTargetUniqueID.ToggleSwitchState) {
-                        // After finding the UniqueID, apply the specific registry settings
-                        await ApplyRegistrySettingsForUniqueID(mRegistryGroupName);
-                    }
-                }
-
-            }
-        }
-        catch (Exception ex) {
-            // Handle any exceptions that might occur during the process
-            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
-        }
-    }
-
-
-
-    /// <summary>
-    /// Applies registry settings based on the information provided in a JSON file for a specific UniqueID.
-    /// </summary>
-    /// <param name="mRegistryGroupName">UniqueID used to filter registry settings.</param>
-    private async Task ApplyRegistrySettingsForUniqueID(string mRegistryGroupName)
-    {
-        try {
-            // Read the content from the JSON file of the registry
-            var registryJsonContent = File.ReadAllText(mRegistry);
-
-            // Deserialize the JSON into a list of RegistrySettings
-            var registrySettings = JsonConvert.DeserializeObject<List<RegistrySettings>>(registryJsonContent);
-
-            // Filter the list of RegistrySettings to get only those with RegistryGroupName equal to the UniqueID
-            var filteredRegistrySettings = registrySettings?
-                .Where(registrySetting => registrySetting.RegistryGroupName == mRegistryGroupName)
-                .ToList();
-
-            if (filteredRegistrySettings != null) {
-                // Iterate over the filtered RegistrySettings
-                foreach (var registrySetting in filteredRegistrySettings) {
-                    // Iterate over the Items in each RegistrySetting
-                    foreach (var item in registrySetting.Items!) {
-                        try {
-                            // Base registry key variable
-                            RegistryKey? mBaseKey = Registry.LocalMachine;
-
-                            // Determine the base of the registry based on the path specified in the JSON
-                            switch (item.Path) {
-                                case string path when path.StartsWith("HKEY_LOCAL_MACHINE"):
-                                    mBaseKey = Registry.LocalMachine;
-                                    break;
-                                case string path when path.StartsWith("USER_CURRENT"):
-                                    mBaseKey = Registry.CurrentUser;
-                                    break;
-                                default:
-                                    // Default case
-                                    break;
-                            }
-
-                            // Get the rest of the path after the root
-                            string subKeyPath = item.Path!.Substring(item.Path.IndexOf("\\") + 1);
-
-                            // Open the registry key
-                            var registryKey = mBaseKey!.OpenSubKey(subKeyPath, true);
-
-                            if (registryKey != null) {
-                                // Check if the key already exists
-                                var existingValue = registryKey.GetValue(item.Name);
-
-                                if (existingValue != null) {
-                                    // If the key exists, delete it before adding it again
-                                    registryKey.DeleteValue(item.Name!);
-                                }
-
-                                // Create the new key with the specified value
-                                if (item.Type == "DWORD") {
-                                    registryKey.SetValue(item.Name, int.Parse(item?.Keyvalue?.EnableValue!), RegistryValueKind.DWord);
-                                }
-                            }
-                        }
-                        catch (Exception ex) {
-                            // Handle any exceptions that might occur during the process
-                            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to apply settings to the registry {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception ex) {
-            // Handle any exceptions that might occur during the process
-            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to load JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
-        }
-    }
-
-    /// <summary>
     /// Counts the total number of 'Items' across all SettingsGroups in the JSON file.
     /// </summary>
     /// <returns>The total count of 'Items' in all groups.</returns>
-    private async Task<int> CountTotalItems(int mTotalCount)
+    private static async Task<int> CountTotalItems(int mTotalCount)
     {
-        try {
-            // Read the content from the JSON file
-            var jsonContent = File.ReadAllText(mSettingsElements);
+        using (HttpClient client = new()) {
 
-            // Deserialize the JSON into a list of SettingsGroups
-            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(value: jsonContent);
+            try {
+                // Read the content from the JSON file
+                var jsonContent = await client.GetStringAsync(Constants.UriConstants.SettingsElementsURL);
 
-            // Iterate through each SettingsGroup
-            foreach (var group in settingsGroups!) {
-                // Check if the current group has 'Items'
-                if (group?.Items != null) {
-                    // Increment the total count by the number of 'Items' in the current group
-                    mTotalCount += group.Items.Count;
+                // Deserialize the JSON into a list of SettingsGroups
+                var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(value: jsonContent);
+
+                // Iterate through each SettingsGroup
+                foreach (var group in settingsGroups!) {
+                    // Check if the current group has 'Items'
+                    if (group?.Items != null) {
+                        // Increment the total count by the number of 'Items' in the current group
+                        mTotalCount += group.Items.Count;
+                    }
                 }
+
+                // Return the total count of 'Items' in all groups
+                return mTotalCount;
             }
+            catch (Exception ex) {
+                // Handle any exceptions that might occur during the process
+                await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to Count the items in the JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
 
-            // Return the total count of 'Items' in all groups
-            return mTotalCount;
-        }
-        catch (Exception ex) {
-            // Handle any exceptions that might occur during the process
-            await ContentDialogExtension.ShowDialogAsync(mTitle: "PowerCommander", mDescription: $"A problem has occurred while trying to Count the items in the JSON file {ex.Message}", mCloseButtonText: "Ok", mPrimaryButtonText: "");
-
-            // Return 0 if there was an issue
-            return 0;
+                // Return 0 if there was an issue
+                return 0;
+            }
         }
     }
 
@@ -292,20 +154,15 @@ public partial class MainViewModel : ObservableRecipient
     [RelayCommand]
     private async void InitializeViewModelAsync()
     {
-        // Initialize the SettingsCard list
-        SecurityAndPrivacy = new List<SettingsItem>();
-        Power = new List<SettingsItem>();
-        GamemodeTweaks = new List<SettingsItem>();
-        OtherTweak = new List<SettingsItem>();
-        Network = new List<SettingsItem>();
+        IsBusy = true;
+        // Initialize the SettingsCard lists
+        SecurityAndPrivacy = await _fetchJSONDataService.InyectDataToList("SecurityAndPrivacy");
+        Power = await _fetchJSONDataService.InyectDataToList("Power");
+        GamemodeTweaks = await _fetchJSONDataService.InyectDataToList("Gamemode");
+        OtherTweak = await _fetchJSONDataService.InyectDataToList("OtherTweaks");
+        Network = await _fetchJSONDataService.InyectDataToList("Network");
 
-        // Call the method to fetch the data into the listview
-        await FetchJSONData("SecurityAndPrivacy", SecurityAndPrivacy);
-        await FetchJSONData("Power", Power);
-        await FetchJSONData("Gamemode", GamemodeTweaks);
-        await FetchJSONData("OtherTweaks", OtherTweak);
-        await FetchJSONData("Network", Network);
-
+        IsBusy = false;
         // Execute the command to retrieve the user's profile picture asynchronously.
         GetUserProfileInfoCommand.Execute(this);
 
@@ -313,19 +170,23 @@ public partial class MainViewModel : ObservableRecipient
         PlaceHolderSuggestions = $"Search for {await CountTotalItems(TotalTweaks)} Tweaks...";
     }
 
+
     [RelayCommand]
     public async Task ExecuteRegistryTask()
     {
-        var mRegistryPath = File.ReadAllText(mRegistry);
+        using (HttpClient client = new()) {
 
-        // Deserialize the JSON into a list of SettingsGroups
-        var mRegistryData = JsonConvert.DeserializeObject<List<RegistrySettings>>(value: mRegistryPath);
+            var regeditFilePath = await client.GetStringAsync(Constants.UriConstants.RegistryElementsURL);
 
-        // For every Regedit found in registryData...
-        foreach (var regedit in mRegistryData!) {
+            // Deserialize the JSON into a list of RegistryItems
+            var mRegistryData = JsonConvert.DeserializeObject<List<RegistrySettings>>(value: regeditFilePath);
 
-            // Add Search and Add for the unique ID
-            await SearchForUniqueID(regedit.RegistryGroupName!);
+            // For every Regedit found in registryData...
+            foreach (var regedit in mRegistryData!) {
+
+                // Add Search and Add for the unique ID
+                await _fetchJSONDataService.SearchForUniqueID(regedit.RegistryGroupName!);
+            }
         }
     }
 

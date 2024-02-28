@@ -6,12 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:windowex="using:WinUIEx"
-    MaxWidth="576"
-    Width="576"
-    MinWidth="576"
-    Height="800"
-    MinHeight="800"
-    MaxHeight="800"
     PersistenceId="MainWindow"
     mc:Ignorable="d">
     <Window.SystemBackdrop>

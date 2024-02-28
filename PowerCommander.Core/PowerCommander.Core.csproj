@@ -2,12 +2,15 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>PowerCommander.Core</RootNamespace>
-    <Platforms>x86;x64;arm64;AnyCPU</Platforms>
-    <ImplicitUsings>enable</ImplicitUsings>
+	  <Platforms>x86;x64;arm64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\PowerCommander\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>

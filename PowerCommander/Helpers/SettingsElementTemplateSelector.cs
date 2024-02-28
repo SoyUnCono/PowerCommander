@@ -3,25 +3,23 @@ using Microsoft.UI.Xaml.Controls;
 using PowerCommander.Models;
 using static PowerCommander.Models.SettingsItem;
 
-namespace PowerCommander.Helpers
+namespace PowerCommander.Helpers;
+public partial class SettingsTemplateSelector : DataTemplateSelector
 {
-    public class SettingsTemplateSelector : DataTemplateSelector
+    public DataTemplate? SettingsCardTemplate { get; set; }
+    public DataTemplate? SettingsExpanderTemplate { get; set; }
+
+    protected override DataTemplate SelectTemplateCore(object item)
     {
-        public DataTemplate? SettingsCardTemplate { get; set; }
-        public DataTemplate? SettingsExpanderTemplate { get; set; }
-
-        protected override DataTemplate SelectTemplateCore(object item)
-        {
-            if (item is SettingsItem settingsItem) {
-                switch (settingsItem.Type) {
-                    case SettingsItemType.SettingsCard:
-                        return SettingsCardTemplate!;
-                    case SettingsItemType.SettingsExpander:
-                        return SettingsExpanderTemplate!;
-                }
+        if (item is SettingsItem settingsItem) {
+            switch (settingsItem.Type) {
+                case SettingsItemType.SettingsCard:
+                    return SettingsCardTemplate!;
+                case SettingsItemType.SettingsExpander:
+                    return SettingsExpanderTemplate!;
             }
-
-            return base.SelectTemplateCore(item);
         }
+
+        return base.SelectTemplateCore(item);
     }
 }

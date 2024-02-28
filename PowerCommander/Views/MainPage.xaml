@@ -3,57 +3,81 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers="using:PowerCommander.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winui="using:WinUICommunity"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <!-- SettingsTemplateSelector -->
+        <!--  SettingsTemplateSelector  -->
         <helpers:SettingsTemplateSelector
             x:Key="SettingsElementTemplateSelector"
             SettingsCardTemplate="{StaticResource SettingsCardTemplate}"
-            SettingsExpanderTemplate="{StaticResource SettingsExpanderTemplate}"
-            />
+            SettingsExpanderTemplate="{StaticResource SettingsExpanderTemplate}" />
 
     </Page.Resources>
 
-    <!-- Main Grid -->
+    <!--  Main Grid  -->
     <Grid x:Name="RootGrid">
-        <!-- Grid Rows -->
+        <!--  Grid Rows  -->
         <Grid.RowDefinitions>
-            <!-- Title Bar Row -->
+            <!--  Title Bar Row  -->
             <RowDefinition Height="38" />
 
-            <!-- Main Content Row -->
+            <!--  Main Content Row  -->
             <RowDefinition Height="*" />
 
-            <!-- Bottom Bar Row -->
+            <!--  Bottom Bar Row  -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- TitleBar -->
-        <Grid x:Name="AppTitleBar" Canvas.ZIndex="1" Grid.Row="0" Background="{ThemeResource PowerCommander_Background}">
-            <!-- TitleBar Content -->
-            <Image Source="/Assets/WindowIcon.ico" HorizontalAlignment="Left" Margin="10,0,0,0" Width="24" Height="24" />
-            <TextBlock Text="PowerCommander" FontWeight="SemiBold" Margin="38,0,0,0" VerticalAlignment="Center" TextWrapping="NoWrap" Style="{StaticResource CaptionTextBlockStyle}" />
+        <!--  TitleBar  -->
+        <Grid
+            x:Name="AppTitleBar"
+            Grid.Row="0"
+            Background="{ThemeResource PowerCommander_Background}"
+            Canvas.ZIndex="1">
+            <!--  TitleBar Content  -->
+            <Image
+                Width="24"
+                Height="24"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                Source="/Assets/WindowIcon.ico" />
+            <TextBlock
+                Margin="38,0,0,0"
+                VerticalAlignment="Center"
+                FontWeight="SemiBold"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="PowerCommander"
+                TextWrapping="NoWrap" />
         </Grid>
 
-        <!-- Growls -->
-        <StackPanel winui:Growl.GrowlParent="True" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="20" Grid.RowSpan="3" Canvas.ZIndex="20" />
+        <!--  Growls  -->
+        <StackPanel
+            Grid.RowSpan="3"
+            Margin="20"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            winui:Growl.GrowlParent="True"
+            Canvas.ZIndex="20" />
 
-        <!-- Main Content Grid -->
+        <!--  Main Content Grid  -->
         <Grid Grid.Row="1" Background="{ThemeResource PowerCommander_Background}">
-            <!-- Grid Rows for Main Content -->
+            <!--  Grid Rows for Main Content  -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- Panel Header -->
-            <Grid Margin="15,10,15,0" Padding="10" VerticalAlignment="Top" Grid.Row="0" >
+            <!--  Panel Header  -->
+            <Grid
+                Grid.Row="0"
+                Margin="15,10,15,0"
+                Padding="10"
+                VerticalAlignment="Top">
 
-                <!-- Recommend Actions & Settings -->
+                <!--  Recommend Actions & Settings  -->
                 <ScrollView Grid.Row="0" Margin="0">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -61,30 +85,39 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <!-- Recommend Actions & Settings -->
-                        <Grid Grid.Row="0" HorizontalAlignment="Stretch"  Padding="10">
+                        <!--  Recommend Actions & Settings  -->
+                        <Grid
+                            Grid.Row="0"
+                            Padding="10"
+                            HorizontalAlignment="Stretch">
 
-                            <!-- Recommend Actions -->
-                            <AutoSuggestBox PlaceholderText="{x:Bind ViewModel.PlaceHolderSuggestions, Mode=TwoWay}" QueryIcon="Zoom" Margin="0,0,200,0" />
+                            <!--  Recommend Actions  -->
+                            <AutoSuggestBox
+                                Margin="0,0,200,0"
+                                PlaceholderText="{x:Bind ViewModel.PlaceHolderSuggestions, Mode=TwoWay}"
+                                QueryIcon="Zoom" />
 
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="2">
+                            <StackPanel
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal"
+                                Spacing="2">
 
-                                <!-- Apply only Minimal Settings -->
+                                <!--  Apply only Minimal Settings  -->
                                 <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Apply only Recommended Settings">
                                     <FontIcon Glyph="&#xE9CA;" />
                                 </Button>
 
-                                <!-- Apply only Recommended Settings -->
+                                <!--  Apply only Recommended Settings  -->
                                 <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Apply only Recommended Settings">
                                     <FontIcon Glyph="&#xE82F;" />
                                 </Button>
 
-                                <!-- Apply All Settings -->
+                                <!--  Apply All Settings  -->
                                 <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Select All">
                                     <FontIcon Glyph="&#xEADF;" />
                                 </Button>
 
-                                <!-- Settings -->
+                                <!--  Settings  -->
                                 <Button HorizontalAlignment="Right" Command="{x:Bind ViewModel.GoToSettingsViewModelCommand}">
                                     <SymbolIcon Symbol="Setting" />
                                 </Button>
@@ -94,73 +127,133 @@
                 </ScrollView>
             </Grid>
 
-            <!-- ScrollView for ListViews -->
-            <ScrollView Grid.Row="2" CornerRadius="8,8,0,0" BorderThickness="1" BorderBrush="{ThemeResource PowerCommander_CardStroke}" VerticalScrollBarVisibility="Hidden" VerticalScrollChainMode="Always" Background="{ThemeResource PowerCommander_Components}">
+            <!--  ScrollView for ListViews  -->
+            <ScrollView
+                Grid.Row="2"
+                Background="{ThemeResource PowerCommander_Components}"
+                BorderBrush="{ThemeResource PowerCommander_CardStroke}"
+                BorderThickness="1"
+                CornerRadius="8,8,0,0"
+                VerticalScrollBarVisibility="Hidden"
+                VerticalScrollChainMode="Always">
+                <!--  Wrap content  -->
+                <Grid>
+                    <!--  Indicate progress  -->
+                    <ProgressRing
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsIndeterminate="{x:Bind ViewModel.IsBusy, Mode=OneWay}"
+                        Visibility="{x:Bind ViewModel.IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
 
-                <!-- StackPanel for ListViews -->
-                <StackPanel Padding="5">
+                    <!--  StackPanel for ListViews  -->
+                    <StackPanel Padding="5" Visibility="{x:Bind ViewModel.IsNotBusy, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
 
-                    <!-- Gamemode ListView -->
-                    <ListView IsItemClickEnabled="False" Grid.Row="1" SelectionMode="None" ItemsSource="{x:Bind ViewModel.GamemodeTweaks, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}" Margin="0,10,0,0" />
+                        <!--  Gamemode ListView  -->
+                        <!--<ListView IsItemClickEnabled="False" Grid.Row="1" SelectionMode="None" ItemsSource="{x:Bind ViewModel.GamemodeTweaks, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}" Margin="0,10,0,0" /> -->
 
-                    <!-- SecurityAndPrivacy ListView -->
-                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.SecurityAndPrivacy, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
-                        <ListView.Header>
-                            <winui:SimpleSettingsGroup Header="Security And Privacy" Margin="20,0,0,0" />
-                        </ListView.Header>
-                    </ListView>
+                        <!--  SecurityAndPrivacy ListView  -->
+                        <ListView
+                            IsItemClickEnabled="False"
+                            ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}"
+                            ItemsSource="{x:Bind ViewModel.SecurityAndPrivacy, Mode=TwoWay}"
+                            SelectionMode="None">
+                            <ListView.Header>
+                                <winui:SimpleSettingsGroup Margin="20,0,0,0" Header="Security And Privacy" />
+                            </ListView.Header>
+                        </ListView>
 
-                    <!-- Network ListView -->
-                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.Network, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
-                        <ListView.Header>
-                            <winui:SimpleSettingsGroup Header="Network" Margin="16,0,12,2" />
-                        </ListView.Header>
-                    </ListView>
+                        <!--  Network ListView  -->
+                        <ListView
+                            IsItemClickEnabled="False"
+                            ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}"
+                            ItemsSource="{x:Bind ViewModel.Network, Mode=TwoWay}"
+                            SelectionMode="None">
+                            <ListView.Header>
+                                <winui:SimpleSettingsGroup Margin="16,0,12,2" Header="Network" />
+                            </ListView.Header>
+                        </ListView>
 
-                    <!-- Power ListView -->
-                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.Power, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
-                        <ListView.Header>
-                            <winui:SimpleSettingsGroup Header="Power" Margin="16,0,12,2" />
-                        </ListView.Header>
-                    </ListView>
+                        <!--  Power ListView  -->
+                        <ListView
+                            IsItemClickEnabled="False"
+                            ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}"
+                            ItemsSource="{x:Bind ViewModel.Power, Mode=TwoWay}"
+                            SelectionMode="None">
+                            <ListView.Header>
+                                <winui:SimpleSettingsGroup Margin="16,0,12,2" Header="Power" />
+                            </ListView.Header>
+                        </ListView>
 
-                    <!-- OtherTweaks ListView -->
-                    <ListView IsItemClickEnabled="False" SelectionMode="None" ItemsSource="{x:Bind ViewModel.OtherTweak, Mode=OneWay}" ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}">
-                        <ListView.Header>
-                            <winui:SimpleSettingsGroup Header="Other Tweaks" Margin="16,0,12,2" />
-                        </ListView.Header>
-                    </ListView>
+                        <!--  OtherTweaks ListView  -->
+                        <ListView
+                            IsItemClickEnabled="False"
+                            ItemTemplateSelector="{StaticResource SettingsElementTemplateSelector}"
+                            ItemsSource="{x:Bind ViewModel.OtherTweak, Mode=TwoWay}"
+                            SelectionMode="None">
+                            <ListView.Header>
+                                <winui:SimpleSettingsGroup Margin="16,0,12,2" Header="Other Tweaks" />
+                            </ListView.Header>
+                        </ListView>
 
-                </StackPanel>
+                    </StackPanel>
+                </Grid>
             </ScrollView>
         </Grid>
 
-        <!-- Bottom Bar -->
-        <Grid Grid.Row="2" Padding="20" Background="{ThemeResource PowerCommander_Background}">
-            <!-- Grid Columns for Bottom Bar -->
+        <!--  Bottom Bar  -->
+        <Grid
+            Grid.Row="2"
+            Padding="20"
+            Background="{ThemeResource PowerCommander_Background}">
+            <!--  Grid Columns for Bottom Bar  -->
             <Grid.ColumnDefinitions>
-                <!-- Left Side -->
+                <!--  Left Side  -->
                 <ColumnDefinition Width="Auto" />
 
-                <!-- Left Side Centered -->
+                <!--  Left Side Centered  -->
                 <ColumnDefinition Width="Auto" />
 
-                <!-- Right Side -->
+                <!--  Right Side  -->
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- Left Side - PersonPicture -->
-            <PersonPicture PreferSmallImage="True" Width="50" HorizontalAlignment="Left" ProfilePicture="{x:Bind ViewModel.AccountPicture, Mode=OneWay}" />
+            <!--  Left Side - PersonPicture  -->
+            <PersonPicture
+                Width="50"
+                HorizontalAlignment="Left"
+                PreferSmallImage="True"
+                ProfilePicture="{x:Bind ViewModel.AccountPicture, Mode=OneWay}" />
 
-            <!-- Left Side Centered - User Info -->
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Grid.Column="1" Margin="10,0,0,0">
-                <TextBlock Text="{x:Bind ViewModel.Username, Mode=OneWay}" FontWeight="SemiBold" IsColorFontEnabled="True" Foreground="{ThemeResource AccentAAFillColorDefaultBrush}" />
-                <TextBlock Text="{x:Bind ViewModel.Email, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" FontSize="12" />
+            <!--  Left Side Centered - User Info  -->
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <TextBlock
+                    FontWeight="SemiBold"
+                    Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"
+                    IsColorFontEnabled="True"
+                    Text="{x:Bind ViewModel.Username, Mode=OneWay}" />
+                <TextBlock
+                    FontSize="12"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ViewModel.Email, Mode=OneWay}" />
             </StackPanel>
 
-            <!-- Apply only Minimal Settings -->
-            <Button HorizontalAlignment="Right" Command="{x:Bind ViewModel.ExecuteRegistryTaskCommand}" Grid.Column="2" Background="{ThemeResource PowerCommander_Background}" BorderBrush="{ThemeResource PowerCommander_CardStroke}" Width="50" Height="40">
-                <FontIcon Glyph="&#xEDB5;" FontSize="22" FontFamily="{ThemeResource SymbolThemeFontFamily}" />
+            <!--  Apply only Minimal Settings  -->
+            <Button
+                Grid.Column="2"
+                Width="50"
+                Height="40"
+                HorizontalAlignment="Right"
+                Background="{ThemeResource PowerCommander_Background}"
+                BorderBrush="{ThemeResource PowerCommander_CardStroke}"
+                Command="{x:Bind ViewModel.ExecuteRegistryTaskCommand}">
+                <FontIcon
+                    FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                    FontSize="22"
+                    Glyph="&#xEDB5;" />
             </Button>
         </Grid>
     </Grid>

@@ -6,7 +6,6 @@ using PowerCommander.Activation;
 using PowerCommander.Contracts.Services;
 using PowerCommander.Core.Contracts.Services;
 using PowerCommander.Core.Services;
-using PowerCommander.Helpers;
 using PowerCommander.Models;
 using PowerCommander.Services;
 using PowerCommander.ViewModels;
@@ -63,6 +62,7 @@ public partial class App : Application
             services.AddSingleton<IActivationService, ActivationService>();
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IFetchJSONDataService, FetchJSONDataService>();
 
             // Core Services
             services.AddSingleton<IFileService, FileService>();
@@ -89,7 +89,7 @@ public partial class App : Application
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        base.OnLaunched(args);
+        base.OnLaunched(args); 
 
         await App.GetService<IActivationService>().ActivateAsync(args);
     }

@@ -71,7 +71,8 @@ public sealed partial class MainWindow : WindowEx
         var presenter = appWindow.Presenter as OverlappedPresenter;
 
         // if presenter is not null..
-        if (presenter != null) {
+        if (presenter != null)
+        {
 
             // Set window properties: IsMaximizable, IsMinimizable, IsResizable, IsAlwaysOnTop
             presenter.IsMaximizable = false;

@@ -92,10 +92,7 @@
                             HorizontalAlignment="Stretch">
 
                             <!--  Recommend Actions  -->
-                            <AutoSuggestBox
-                                Margin="0,0,200,0"
-                                PlaceholderText="{x:Bind ViewModel.PlaceHolderSuggestions, Mode=TwoWay}"
-                                QueryIcon="Zoom" />
+                            <AutoSuggestBox PlaceholderText="{x:Bind ViewModel.PlaceHolderSuggestions, Mode=TwoWay}" QueryIcon="Zoom" />
 
                             <StackPanel
                                 HorizontalAlignment="Right"
@@ -103,24 +100,32 @@
                                 Spacing="2">
 
                                 <!--  Apply only Minimal Settings  -->
+                                <!--
                                 <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Apply only Recommended Settings">
                                     <FontIcon Glyph="&#xE9CA;" />
                                 </Button>
 
+                                -->
                                 <!--  Apply only Recommended Settings  -->
+                                <!--
                                 <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Apply only Recommended Settings">
                                     <FontIcon Glyph="&#xE82F;" />
                                 </Button>
 
+                                -->
                                 <!--  Apply All Settings  -->
+                                <!--
                                 <Button HorizontalAlignment="Right" ToolTipService.ToolTip="Select All">
                                     <FontIcon Glyph="&#xEADF;" />
-                                </Button>
+                                </Button>-->
 
                                 <!--  Settings  -->
-                                <Button HorizontalAlignment="Right" Command="{x:Bind ViewModel.GoToSettingsViewModelCommand}">
+                                <!--<Button
+                                    Height="40"
+                                    HorizontalAlignment="Right"
+                                    Command="{x:Bind ViewModel.GoToSettingsViewModelCommand}">
                                     <SymbolIcon Symbol="Setting" />
-                                </Button>
+                                </Button>-->
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -217,39 +222,89 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!--  Left Side - PersonPicture  -->
-            <PersonPicture
-                Width="50"
-                HorizontalAlignment="Left"
-                PreferSmallImage="True"
-                ProfilePicture="{x:Bind ViewModel.AccountPicture, Mode=OneWay}" />
 
-            <!--  Left Side Centered - User Info  -->
-            <StackPanel
-                Grid.Column="1"
-                Margin="10,0,0,0"
-                VerticalAlignment="Center"
-                Orientation="Vertical">
-                <TextBlock
-                    FontWeight="SemiBold"
-                    Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"
-                    IsColorFontEnabled="True"
-                    Text="{x:Bind ViewModel.Username, Mode=OneWay}" />
-                <TextBlock
-                    FontSize="12"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="{x:Bind ViewModel.Email, Mode=OneWay}" />
-            </StackPanel>
+            <!--  clickable Left section  -->
+            <Button
+                x:Name="leftSideButton"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="onPersonPictureTapped">
+                <FlyoutBase.AttachedFlyout>
+                    <!--  Menu flyout  -->
+                    <MenuFlyout
+                        AllowFocusOnInteraction="True"
+                        AreOpenCloseAnimationsEnabled="True"
+                        LightDismissOverlayMode="On">
+                        <MenuFlyoutItem
+                            HorizontalAlignment="Left"
+                            FontWeight="SemiBold"
+                            IsHitTestVisible="False"
+                            Text="Select current Optimization" />
+                        <MenuFlyoutSeparator />
+                        <RadioMenuFlyoutItem Text="Minimal">
+                            <RadioMenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE9CA;" />
+                            </RadioMenuFlyoutItem.Icon>
+                        </RadioMenuFlyoutItem>
+                        <RadioMenuFlyoutItem IsChecked="True" Text="Default">
+                            <RadioMenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xEADF;" />
+                            </RadioMenuFlyoutItem.Icon>
+                        </RadioMenuFlyoutItem>
+                        <RadioMenuFlyoutItem Text="Recommend">
+                            <RadioMenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xE82F;" />
+                            </RadioMenuFlyoutItem.Icon>
+                        </RadioMenuFlyoutItem>
+                        <RadioMenuFlyoutItem Text="Select All">
+                            <RadioMenuFlyoutItem.Icon>
+                                <FontIcon Glyph="&#xEADF;" />
+                            </RadioMenuFlyoutItem.Icon>
+                        </RadioMenuFlyoutItem>
+                        <MenuFlyoutSeparator />
+                        <RadioMenuFlyoutItem Command="{x:Bind ViewModel.GoToSettingsViewModelCommand}" Text="Settings">
+                            <RadioMenuFlyoutItem.Icon>
+                                <SymbolIcon Symbol="Setting" />
+                            </RadioMenuFlyoutItem.Icon>
+                        </RadioMenuFlyoutItem>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
 
-            <!--  Apply only Minimal Settings  -->
+                <StackPanel Orientation="Horizontal">
+                    <!--  Left Side - PersonPicture  -->
+                    <PersonPicture
+                        Width="50"
+                        HorizontalAlignment="Left"
+                        PreferSmallImage="True"
+                        ProfilePicture="{x:Bind ViewModel.AccountPicture, Mode=OneWay}" />
+
+                    <!--  Left Side Centered - User Info  -->
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"
+                            IsColorFontEnabled="True"
+                            Text="{x:Bind ViewModel.Username, Mode=OneWay}" />
+                        <TextBlock
+                            FontSize="12"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{x:Bind ViewModel.Email, Mode=OneWay}" />
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+
+            <!--  Apply Settings  -->
             <Button
                 Grid.Column="2"
                 Width="50"
                 Height="40"
                 HorizontalAlignment="Right"
-                Background="{ThemeResource PowerCommander_Background}"
-                BorderBrush="{ThemeResource PowerCommander_CardStroke}"
-                Command="{x:Bind ViewModel.ExecuteRegistryTaskCommand}">
+                Command="{x:Bind ViewModel.ExecuteRegistryTaskCommand}"
+                Style="{StaticResource AccentButtonStyle}">
                 <FontIcon
                     FontFamily="{ThemeResource SymbolThemeFontFamily}"
                     FontSize="22"

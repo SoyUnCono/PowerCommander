@@ -71,11 +71,11 @@
                 </Grid>
             </ToolTipService.ToolTip>
             <ToggleSwitch
-                IsOn="{Binding ToggleSwitchState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                IsOn="{x:Bind ToggleSwitchState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 OffContent=""
                 OnContent=""
-                Toggled="ToggleSwitch_Toggled"
-                Tag="{Binding UniqueID, Mode=OneWay}" />
+                Tag="{Binding UniqueID, Mode=OneWay}"
+                Toggled="ToggleSwitch_Toggled" />
         </winui:SettingsCard>
     </DataTemplate>
 

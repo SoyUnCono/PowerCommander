@@ -21,7 +21,7 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Service used for Fetching Data.
     /// </summary>
-    private readonly Contracts.Services.IFetchJSONDataService _fetchJSONDataService;
+    private readonly .ServiContractsces.IFetchJSONDataService _fetchJSONDataService;
 
     #endregion
 
@@ -108,7 +108,7 @@ public partial class MainViewModel : ObservableRecipient
     /// Counts the total number of 'Items' across all SettingsGroups in the JSON file.
     /// </summary>
     /// <returns>The total count of 'Items' in all groups.</returns>
-    private static async Task<int> CountTotalItems(int mTotalCount)
+    private static async Task<int> CountTotalItems(int totalCount)
     {
         using (HttpClient client = new()) {
 
@@ -124,12 +124,12 @@ public partial class MainViewModel : ObservableRecipient
                     // Check if the current group has 'Items'
                     if (group?.Items != null) {
                         // Increment the total count by the number of 'Items' in the current group
-                        mTotalCount += group.Items.Count;
+                        totalCount += group.Items.Count;
                     }
                 }
 
                 // Return the total count of 'Items' in all groups
-                return mTotalCount;
+                return totalCount;
             }
             catch (Exception ex) {
                 // Handle any exceptions that might occur during the process

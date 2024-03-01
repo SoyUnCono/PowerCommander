@@ -171,24 +171,31 @@ public partial class MainViewModel : ObservableRecipient
     }
 
 
+    /// <summary>
+    /// Executes a registry task asynchronously using a RelayCommand.
+    /// </summary>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     [RelayCommand]
     public async Task ExecuteRegistryTask()
     {
+        // Using statement ensures proper disposal of HttpClient
         using (HttpClient client = new()) {
 
+            // Fetch the RegistryElementsURL content as a string asynchronously
             var regeditFilePath = await client.GetStringAsync(Constants.UriConstants.RegistryElementsURL);
 
-            // Deserialize the JSON into a list of RegistryItems
+            // Deserialize the JSON string into a list of RegistrySettings objects
             var mRegistryData = JsonConvert.DeserializeObject<List<RegistrySettings>>(value: regeditFilePath);
 
-            // For every Regedit found in registryData...
+            // Iterate through each RegistrySettings object in the list
             foreach (var regedit in mRegistryData!) {
 
-                // Add Search and Add for the unique ID
+                // Perform a search for the unique ID associated with the RegistryGroupName
                 await _fetchJSONDataService.SearchForUniqueID(regedit.RegistryGroupName!);
             }
         }
     }
+
 
     /// <summary>
     /// Command to retrieve the user's profile information including picture, email, and account name.

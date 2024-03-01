@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.UI.Dispatching;
+using Newtonsoft.Json;
 using PowerCommander.Models;
 
 namespace PowerCommander.Helpers;
@@ -27,8 +28,11 @@ public static class UpdateModelData
 
             // Check if a valid SettingsItem object was found
             if (settingsItemToUpdate != null) {
-                // Update the ToggleSwitchState property of the SettingsItem object
-                settingsItemToUpdate.ToggleSwitchState = toggleSwitchState;
+                // Update the current value on the main Thread
+                DispatcherQueue.GetForCurrentThread().TryEnqueue(() => {
+                    // Update the ToggleSwitchState property of the SettingsItem object
+                    settingsItemToUpdate.ToggleSwitchState=toggleSwitchState;
+                });
             }
         }
     }

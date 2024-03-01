@@ -21,7 +21,7 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Service used for Fetching Data.
     /// </summary>
-    private readonly .ServiContractsces.IFetchJSONDataService _fetchJSONDataService;
+    private readonly Contracts.Services.IFetchJSONDataService _fetchJSONDataService;
 
     #endregion
 

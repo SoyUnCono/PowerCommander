@@ -17,7 +17,7 @@ public sealed partial class SettingsCardTemplate : ResourceDictionary
         var uniqueID = toggleSwitch?.Tag?.ToString();
 
         if (!string.IsNullOrEmpty(uniqueID)) {
-            // Actualiza el modelo de datos según el estado del ToggleSwitch
+            // Set Toggle Switch State
             UpdateModelData.UpdateData(uniqueID, toggleSwitch!.IsOn);
         }
     }

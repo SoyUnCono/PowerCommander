@@ -90,7 +90,7 @@ public class FetchJSONDataService : IFetchJSONDataService
                     .FirstOrDefault(item => item.UniqueID==registryGroupName);
 
                     // Check if there is at least one ToggleSwitch that is enabled
-                    if (targetUniqueID!=null&&targetUniqueID.ToggleSwitchState==true) {
+                    if (targetUniqueID!=null) {
                         // After finding the UniqueID, apply the specific registry settings
                         await ApplyRegistrySettingsForUniqueID(registryGroupName);
                     }

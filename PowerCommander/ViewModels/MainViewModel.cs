@@ -65,7 +65,7 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Indicates if the current thread is busy or not
     /// </summary>
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(IsNotBusy))] private bool _isBusy;
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(IsNotBusy))] private bool _isBusy;
 
     /// <summary>
     /// Represents the current profile picture associated with the local user account.
@@ -95,10 +95,10 @@ public partial class MainViewModel : ObservableRecipient
     public MainViewModel(Contracts.Services.INavigationService navigationService, Contracts.Services.IFetchJSONDataService fetchJSONDataService)
     {
         // Initialize navigationService
-        _navigationService = navigationService;
+        _navigationService=navigationService;
 
         // Initialize fetching service
-        _fetchJSONDataService = fetchJSONDataService;
+        _fetchJSONDataService=fetchJSONDataService;
     }
 
 
@@ -122,9 +122,9 @@ public partial class MainViewModel : ObservableRecipient
                 // Iterate through each SettingsGroup
                 foreach (var group in settingsGroups!) {
                     // Check if the current group has 'Items'
-                    if (group?.Items != null) {
+                    if (group?.Items!=null) {
                         // Increment the total count by the number of 'Items' in the current group
-                        totalCount += group.Items.Count;
+                        totalCount+=group.Items.Count;
                     }
                 }
 
@@ -154,20 +154,20 @@ public partial class MainViewModel : ObservableRecipient
     [RelayCommand]
     private async Task InitializeViewModelAsync()
     {
-        IsBusy = true;
+        IsBusy=true;
         // Initialize the SettingsCard lists
-        SecurityAndPrivacy = await _fetchJSONDataService.InyectDataToList("SecurityAndPrivacy");
-        Power = await _fetchJSONDataService.InyectDataToList("Power");
-        GamemodeTweaks = await _fetchJSONDataService.InyectDataToList("Gamemode");
-        OtherTweak = await _fetchJSONDataService.InyectDataToList("OtherTweaks");
-        Network = await _fetchJSONDataService.InyectDataToList("Network");
+        SecurityAndPrivacy=await _fetchJSONDataService.InyectDataToList("SecurityAndPrivacy");
+        Power=await _fetchJSONDataService.InyectDataToList("Power");
+        GamemodeTweaks=await _fetchJSONDataService.InyectDataToList("Gamemode");
+        OtherTweak=await _fetchJSONDataService.InyectDataToList("OtherTweaks");
+        Network=await _fetchJSONDataService.InyectDataToList("Network");
 
-        IsBusy = false;
+        IsBusy=false;
         // Execute the command to retrieve the user's profile picture asynchronously.
         GetUserProfileInfoCommand.Execute(this);
 
         // Update the PlaceHolderSuggestions property with a message indicating the search for the total number of tweaks.
-        PlaceHolderSuggestions = $"Search for {await CountTotalItems(TotalTweaks)} Tweaks...";
+        PlaceHolderSuggestions=$"Search for {await CountTotalItems(TotalTweaks)} Tweaks...";
     }
 
 
@@ -187,12 +187,26 @@ public partial class MainViewModel : ObservableRecipient
             // Deserialize the JSON string into a list of RegistrySettings objects
             var mRegistryData = JsonConvert.DeserializeObject<List<RegistrySettings>>(value: regeditFilePath);
 
-            // Iterate through each RegistrySettings object in the list
-            foreach (var regedit in mRegistryData!) {
+            // Read the content from the JSON file containing settings items
+            var settingsJsonContent = await client.GetStringAsync(Constants.UriConstants.SettingsElementsURL);
 
-                // Perform a search for the unique ID associated with the RegistryGroupName
-                await _fetchJSONDataService.SearchForUniqueID(regedit.RegistryGroupName!);
+            // Deserialize the JSON into a list of SettingsGroups
+            var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(settingsJsonContent);
+
+            // Itera a través de cada objeto RegistrySettings en la lista
+            foreach (var regedit in mRegistryData!) {
+                // Busca el UniqueID correspondiente en la lista de grupos de configuración
+                var targetUniqueID = settingsGroups!
+                    .SelectMany(group => group.Items!)
+                    .FirstOrDefault(item => item.UniqueID==regedit.RegistryGroupName);
+
+                // Verifica si se encuentra al menos un ToggleSwitch habilitado
+                if (targetUniqueID!.ToggleSwitchState==true) {
+                    // Después de encontrar el UniqueID, aplica la configuración específica del registro
+                    await _fetchJSONDataService.ApplyRegistrySettingsForUniqueID(regedit.RegistryGroupName!);
+                }
             }
+
         }
     }
 
@@ -206,36 +220,36 @@ public partial class MainViewModel : ObservableRecipient
         try {
             // Find the local user and retrieve their profile information.
             var user = (await User.FindAllAsync(UserType.LocalUser)).FirstOrDefault();
-            if (user != null) {
+            if (user!=null) {
 
                 // Get the user's picture
                 var userPicture = await user.GetPictureAsync(UserPictureSize.Size64x64);
 
                 // Add the first name to the Username string
-                Username = (await user.GetPropertyAsync(KnownUserProperties.DisplayName))?.ToString()?.ToUpper();
+                Username=(await user.GetPropertyAsync(KnownUserProperties.DisplayName))?.ToString()?.ToUpper();
 
                 // If Username is Empty...
                 if (string.IsNullOrEmpty(Username))
                     // Use the local machine name.
-                    Username = Environment.UserName;
+                    Username=Environment.UserName;
 
                 // Add the last name to the Email string
-                Email = (await user.GetPropertyAsync(KnownUserProperties.AccountName))?.ToString();
+                Email=(await user.GetPropertyAsync(KnownUserProperties.AccountName))?.ToString();
 
                 // If Email is null...
                 if (string.IsNullOrEmpty(Email))
                     // Set it to "Local Account" to indicate that the user's email is not available.
-                    Email = "Local Account";
+                    Email="Local Account";
 
                 // If a profile picture is available, set it as the system picture.
-                if (userPicture != null) {
+                if (userPicture!=null) {
                     // Open the picture stream and create a BitmapImage from it.
                     using var stream = await userPicture.OpenReadAsync();
                     var bitmapImage = new BitmapImage();
                     await bitmapImage.SetSourceAsync(stream);
 
                     // Set the system picture to the retrieved BitmapImage.
-                    AccountPicture = bitmapImage;
+                    AccountPicture=bitmapImage;
                 }
             }
         }

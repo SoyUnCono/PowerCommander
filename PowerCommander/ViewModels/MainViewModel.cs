@@ -193,19 +193,20 @@ public partial class MainViewModel : ObservableRecipient
             // Deserialize the JSON into a list of SettingsGroups
             var settingsGroups = JsonConvert.DeserializeObject<List<SettingsGroups>>(settingsJsonContent);
 
-            // Itera a través de cada objeto RegistrySettings en la lista
+            // Iterate through each RegistrySettings object in the list
             foreach (var regedit in mRegistryData!) {
-                // Busca el UniqueID correspondiente en la lista de grupos de configuración
+                // Find the target UniqueID in the list of settings groups
                 var targetUniqueID = settingsGroups!
                     .SelectMany(group => group.Items!)
                     .FirstOrDefault(item => item.UniqueID==regedit.RegistryGroupName);
 
-                // Verifica si se encuentra al menos un ToggleSwitch habilitado
+                // Check if there is at least one ToggleSwitch that is enabled
                 if (targetUniqueID!.ToggleSwitchState==true) {
-                    // Después de encontrar el UniqueID, aplica la configuración específica del registro
+                    // After finding the UniqueID, apply the specific registry settings
                     await _fetchJSONDataService.ApplyRegistrySettingsForUniqueID(regedit.RegistryGroupName!);
                 }
             }
+
 
         }
     }

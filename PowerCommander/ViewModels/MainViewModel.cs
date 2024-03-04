@@ -152,7 +152,7 @@ public partial class MainViewModel : ObservableRecipient
     /// Initializes the ViewModel asynchronously, sets various properties, and updates UI elements.
     /// </summary>
     [RelayCommand]
-    private async void InitializeViewModelAsync()
+    private async Task InitializeViewModelAsync()
     {
         IsBusy = true;
         // Initialize the SettingsCard lists

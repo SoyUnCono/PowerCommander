@@ -36,7 +36,7 @@ public sealed partial class MainPage : Page
         App.MainWindow.SetTitleBar(AppTitleBar);
 
         // Start the asynchronous execution of the ViewModel's initialization command for the page.
-        ViewModel.InitializeViewModelAsyncCommand.Execute(this);
+        ViewModel.InitializeViewModelCommand.Execute(this);
     }
 
     /// <summary>

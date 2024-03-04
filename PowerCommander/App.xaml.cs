@@ -10,6 +10,7 @@ using PowerCommander.Models;
 using PowerCommander.Services;
 using PowerCommander.ViewModels;
 using PowerCommander.Views;
+using System.Diagnostics;
 using WinUIEx;
 
 namespace PowerCommander;
@@ -30,8 +31,7 @@ public partial class App : Application
     public static T GetService<T>()
         where T : class
     {
-        if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
-        {
+        if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service) {
             throw new ArgumentException($"{typeof(T)} needs to be registered in ConfigureServices within App.xaml.cs.");
         }
 
@@ -46,11 +46,10 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        Host = Microsoft.Extensions.Hosting.Host.
+        Host=Microsoft.Extensions.Hosting.Host.
         CreateDefaultBuilder().
         UseContentRoot(AppContext.BaseDirectory).
-        ConfigureServices((context, services) =>
-        {
+        ConfigureServices((context, services) => {
             // Default Activation Handler
             services.AddTransient<ActivationHandler<LaunchActivatedEventArgs>, DefaultActivationHandler>();
 
@@ -78,18 +77,46 @@ public partial class App : Application
         }).
         Build();
 
-        UnhandledException += App_UnhandledException;
+        UnhandledException+=App_UnhandledException;
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
-        // TODO: Log and handle exceptions as appropriate.
-        // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
+        // Log the exception
+        LogException(e.Exception);
+
+        // Mark the exception as handled to prevent the application from crashing
+        e.Handled=true;
+    }
+
+    /// <summary>
+    /// Logs an unhandled exception to a file on the desktop. If the specified directory
+    /// ("PowerCommanderException") doesn't exist, it creates the directory before
+    /// appending the exception details to the log file.
+    /// </summary>
+    /// <param name="exception">The exception to be logged.</param>
+    private static void LogException(Exception exception)
+    {
+        // Get Desktop Path
+        var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+        // Combine the desktop path with the new folder and file names
+        var logFolderPath = Path.Combine(desktopPath, "PowerCommanderException");
+        var logFilePath = Path.Combine(logFolderPath, "Exception.txt");
+
+        // Create the directory if it doesn't exist
+        if (!Directory.Exists(logFolderPath)) {
+            Directory.CreateDirectory(logFolderPath);
+        }
+
+        // Appending to the log file
+        File.AppendAllText(logFilePath, $"Unhandled Exception: {exception.Message}{Environment.NewLine}");
+
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        base.OnLaunched(args); 
+        base.OnLaunched(args);
 
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
